@@ -1,0 +1,16 @@
+{
+  "name": "detective-day",
+  "version": "1.0.0",
+  "description": "An interactive detective game powered by Claude",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -c-1"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4",
+    "openai": "^5.16.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "gpt-image-1": {
+      "command": "node",
+      "args": [
+        "/Users/brunogalvao/Documents/dev-bruno/detective-day/gpt-image-1-mcp-server/build/index.js"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}"
+      }
+    }
+  }
+}

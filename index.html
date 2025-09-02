@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detective Day - Murder Mystery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="intro-screen" class="screen active">
+            <h1>Detective Day</h1>
+            <div class="case-intro">
+                <h2>The Westwood Manor Murder</h2>
+                <div class="case-details"></div>
+                <button id="start-investigation" class="btn-primary">Begin Investigation</button>
+            </div>
+        </div>
+
+        <div id="investigation-screen" class="screen">
+            <div class="sidebar">
+                <h3>People of Interest</h3>
+                <div id="character-list" class="character-list"></div>
+                <div class="special-actions">
+                    <button id="forensics-btn" class="special-btn">
+                        <span class="icon">🔬</span>
+                        Crime Scene Expert
+                    </button>
+                    <button id="prosecutor-btn" class="special-btn prosecutor">
+                        <span class="icon">⚖️</span>
+                        District Attorney
+                    </button>
+                </div>
+                <button id="view-evidence" class="btn-secondary">View Evidence</button>
+                <button id="view-notes" class="btn-secondary">View Notes</button>
+                <button id="reset-game" class="btn-secondary" style="margin-top: 1rem; background: rgba(255,107,107,0.1); border-color: rgba(255,107,107,0.3);">Reset Game</button>
+            </div>
+
+            <div class="chat-area">
+                <div class="chat-header">
+                    <h3 id="chat-title">Select someone to interview</h3>
+                    <button id="close-chat" class="close-btn">×</button>
+                </div>
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Type your question..." disabled>
+                    <button id="send-btn" disabled>Send</button>
+                </div>
+            </div>
+
+            <div id="evidence-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Evidence Collected</h2>
+                    <div id="evidence-list"></div>
+                </div>
+            </div>
+
+            <div id="notes-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Your Notes</h2>
+                    <textarea id="notes-area" placeholder="Take notes here..."></textarea>
+                    <button id="save-notes" class="btn-secondary">Save Notes</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="win-screen" class="screen">
+            <div class="win-content">
+                <h1>Case Closed!</h1>
+                <div id="win-message"></div>
+                <button id="play-again" class="btn-primary">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="api-key-modal" class="modal active">
+        <div class="modal-content">
+            <h2>Enter Anthropic API Key</h2>
+            <p>This game requires an Anthropic API key to function.</p>
+            <input type="password" id="api-key-input" placeholder="sk-ant-...">
+            <button id="save-api-key" class="btn-primary">Save & Start</button>
+            <p class="small-text">Your API key is stored locally and never sent to any server except Anthropic's.</p>
+        </div>
+    </div>
+
+    <script src="facts-database.js"></script>
+    <script src="character-timelines.js"></script>
+    <script src="scenario.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
