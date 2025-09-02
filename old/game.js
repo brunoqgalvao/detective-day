@@ -541,7 +541,7 @@ class DetectiveGame {
                 'anthropic-dangerous-direct-browser-access': 'true'
             },
             body: JSON.stringify({
-                model: 'claude-3-5-sonnet-20241022',
+                model: 'claude-sonnet-4-20250514',
                 system: systemPrompt,
                 messages: messages,
                 max_tokens: 1000,
@@ -668,7 +668,7 @@ Respond "INCONSISTENT" if it violates any rule above.`;
                 'anthropic-dangerous-direct-browser-access': 'true'
             },
             body: JSON.stringify({
-                model: 'claude-3-5-sonnet-20241022',
+                model: 'claude-sonnet-4-20250514',
                 messages: [{ role: 'user', content: checkPrompt }],
                 max_tokens: 10,
                 temperature: 0
@@ -913,7 +913,7 @@ RESPONSE:`;
                     'anthropic-dangerous-direct-browser-access': 'true'
                 },
                 body: JSON.stringify({
-                    model: 'claude-3-5-sonnet-20241022',
+                    model: 'claude-sonnet-4-20250514',
                     messages: [{ role: 'user', content: classificationPrompt }],
                     max_tokens: 5,
                     temperature: 0

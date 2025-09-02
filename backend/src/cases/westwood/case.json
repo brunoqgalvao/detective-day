@@ -1,0 +1,121 @@
+{
+  "id": "westwood",
+  "title": "The Westwood Manor Murder",
+  "initialBriefing": "<p><strong>Date:</strong> October 15th, 2024 - 11:47 PM</p><p><strong>Location:</strong> Westwood Manor, Countryside Estate</p><p>You've been called to investigate a murder at the prestigious Westwood Manor. The victim is <strong>Victor Westwood</strong>, 52, a wealthy tech entrepreneur and owner of the estate. He was found dead in his study at approximately 10:30 PM by the manor's butler.</p><p><strong>Crime Scene Details:</strong></p><ul><li>The victim was found slumped over his desk with signs of poisoning (foam around mouth, discoloration)</li><li>A glass of whiskey was found on the desk, half-consumed</li><li>The study door was locked from the inside, but there's a second entrance through the adjoining library</li><li>No signs of struggle were apparent</li><li>The window was slightly ajar despite the cold weather</li></ul><p><strong>Initial Information:</strong></p><p>A dinner party was being held at the manor tonight with family and close associates. All guests are still present and have been asked to remain for questioning. The manor's security system shows no unauthorized entries, suggesting the perpetrator is among those present.</p><p>Your task is to interview suspects, examine evidence, and either obtain a confession or gather enough evidence to convince the District Attorney to press charges.</p>",
+  "victim": {
+    "name": "Victor Westwood",
+    "age": 52,
+    "occupation": "Tech Entrepreneur",
+    "description": "Founder and CEO of Westwood Technologies. Known for his ruthless business tactics and complicated personal life.",
+    "timeOfDeath": "Approximately 10:00-10:30 PM",
+    "causeOfDeath": "Poisoning - likely cyanide based on preliminary examination"
+  },
+  "characters": [
+    {
+      "id": "sophia",
+      "name": "Sophia Westwood",
+      "role": "Wife",
+      "age": 45,
+      "publicInfo": "Victor's wife of 20 years. A former actress who gave up her career after marriage."
+    },
+    {
+      "id": "marcus",
+      "name": "Marcus Westwood",
+      "role": "Son",
+      "age": 26,
+      "publicInfo": "Victor's son from his first marriage. Works at the family company but in a junior position."
+    },
+    {
+      "id": "elena",
+      "name": "Elena Rodriguez",
+      "role": "Personal Assistant",
+      "age": 28,
+      "publicInfo": "Victor's personal assistant for 3 years. Handles his schedule and personal affairs."
+    },
+    {
+      "id": "james",
+      "name": "James Crawford",
+      "role": "Business Partner",
+      "age": 48,
+      "publicInfo": "Co-founder of Westwood Technologies. Has worked with Victor for 15 years."
+    },
+    {
+      "id": "thomas",
+      "name": "Thomas Chen",
+      "role": "Investor",
+      "age": 55,
+      "publicInfo": "Major investor in Westwood Technologies. Visiting for potential new deal."
+    },
+    {
+      "id": "margaret",
+      "name": "Margaret Shaw",
+      "role": "Sister",
+      "age": 49,
+      "publicInfo": "Victor's younger sister. Manages a struggling art gallery in the city."
+    },
+    {
+      "id": "robert",
+      "name": "Robert Hutchinson",
+      "role": "Butler",
+      "age": 62,
+      "publicInfo": "Head butler at Westwood Manor for 25 years. Found the body."
+    },
+    {
+      "id": "isabella",
+      "name": "Isabella Westwood",
+      "role": "Daughter",
+      "age": 23,
+      "publicInfo": "Victor's daughter with Sophia. Recent college graduate, artist."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "whiskey_glass",
+      "name": "Whiskey Glass",
+      "description": "Half-empty glass found on Victor's desk. Tests positive for cyanide. Only Victor's fingerprints found.",
+      "discovered": false
+    },
+    {
+      "id": "threatening_note",
+      "name": "Threatening Note",
+      "description": "Note found in Victor's desk drawer: 'You have 48 hours to make this right or everyone will know the truth.'",
+      "discovered": false
+    },
+    {
+      "id": "chemistry_book",
+      "name": "Chemistry Textbook",
+      "description": "Found in library with bookmark on page about cyanide compounds. Has marginal notes in Marcus's handwriting.",
+      "discovered": false
+    },
+    {
+      "id": "security_footage",
+      "name": "Security Camera Logs",
+      "description": "Shows Elena leaving study at 9:45 PM, Marcus entering garden at 9:40 PM, and Robert entering study at 10:30 PM.",
+      "discovered": false
+    },
+    {
+      "id": "financial_records",
+      "name": "Financial Documents",
+      "description": "Hidden documents showing James's embezzlement and Thomas's fraudulent investments.",
+      "discovered": false
+    },
+    {
+      "id": "pregnancy_test",
+      "name": "Pregnancy Test Box",
+      "description": "Found in waste basket in Elena's office bathroom. Positive result.",
+      "discovered": false
+    },
+    {
+      "id": "divorce_papers",
+      "name": "Draft Divorce Papers",
+      "description": "Found in Sophia's room, dated one week ago. Shows she was planning to file for divorce.",
+      "discovered": false
+    },
+    {
+      "id": "poison_bottle",
+      "name": "Cyanide Container",
+      "description": "Small bottle found hidden in the greenhouse. Partial fingerprints too smudged to identify.",
+      "discovered": false
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 # Claude Instructions
 
+## Project Structure
+This project is being refactored:
+- **Active development**: `frontend/` and `backend/` directories contain the new Svelte-based frontend and backend packages
+- **Legacy code**: Files outside these directories (like `game.js`) are from the old version being refactored
+- **Running the project**: Use `./start.sh` to start both frontend and backend servers
+
 ## Image Generation
 
 This project has GPT-Image-1 image generation capabilities set up. To generate images:

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: detective_day_postgres
+    restart: unless-stopped
+    ports:
+      - "5434:5432"  # Using port 5434 to avoid conflicts with other PostgreSQL instances
+    environment:
+      POSTGRES_DB: detective_day
+      POSTGRES_USER: detective_user
+      POSTGRES_PASSWORD: detective_pass_2024
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - detective_postgres_data:/var/lib/postgresql/data
+      - ./backend/src/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U detective_user -d detective_day"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  detective_postgres_data:
+    name: detective_day_postgres_data
