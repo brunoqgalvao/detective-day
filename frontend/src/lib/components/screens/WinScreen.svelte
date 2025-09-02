@@ -48,6 +48,7 @@
     justify-content: center;
     min-height: 100vh;
     padding: 2rem;
+    padding-top: calc(60px + 2rem);
     background: radial-gradient(ellipse at center, #2d2d44 0%, #1e1e2e 100%);
   }
   

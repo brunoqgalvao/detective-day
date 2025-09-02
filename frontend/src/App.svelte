@@ -6,7 +6,7 @@
   import InvestigationScreen from './lib/components/screens/InvestigationScreen.svelte';
   import WinScreen from './lib/components/screens/WinScreen.svelte';
   import Notification from './lib/components/ui/Notification.svelte';
-  import MusicToggle from './lib/components/ui/MusicToggle.svelte';
+  import TopNavTabs from './lib/components/ui/TopNavTabs.svelte';
 
   let currentScreen = 'intro';
   
@@ -32,8 +32,8 @@
     <WinScreen />
   {/if}
 
+  <TopNavTabs />
   <Notification />
-  <MusicToggle />
 </main>
 
 <style>

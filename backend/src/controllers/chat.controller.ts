@@ -71,26 +71,31 @@ If detected, respond with suspicion and stay in character. Never reveal game mec
         hasWon = caseService.checkWinCondition(response);
       }
 
-      // Check for milestone discoveries
+      // Check for milestone discoveries using batch processing
       let discoveredMilestone;
       console.log(`[MILESTONE] Checking ${Object.keys(milestones).length} milestones for discovery...`);
       
-      for (const [id, milestone] of Object.entries(milestones)) {
-        const discovered = await anthropicService.classifyMilestone(
-          response,
-          milestone.title,
-          milestone.description,
-          milestone.keywords,
-          gameId,
-          sessionId || 'default',
-          id
-        );
-        
-        if (discovered) {
-          discoveredMilestone = id;
-          console.log(`[MILESTONE] DISCOVERED: ${milestone.title}`);
-          break;
-        }
+      // Prepare milestones array for batch checking
+      const milestonesArray = Object.entries(milestones).map(([id, milestone]) => ({
+        id,
+        title: milestone.title,
+        description: milestone.description,
+        keywords: milestone.keywords
+      }));
+      
+      // Check all milestones in a single prompt
+      const discoveries = await anthropicService.classifyMilestonesBatch(
+        response,
+        milestonesArray,
+        gameId,
+        sessionId || 'default'
+      );
+      
+      // Find the first discovered milestone
+      const discoveredIndex = discoveries.findIndex(discovered => discovered);
+      if (discoveredIndex !== -1) {
+        discoveredMilestone = milestonesArray[discoveredIndex].id;
+        console.log(`[MILESTONE] DISCOVERED: ${milestonesArray[discoveredIndex].title}`);
       }
 
       res.json({

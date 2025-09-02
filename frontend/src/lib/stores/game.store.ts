@@ -45,9 +45,17 @@ function createGameStore() {
     
     // Initialize game with a case
     async initCase(caseId: string) {
+      // Set investigation start time to 11:00 PM on October 15th, 2024 (1 hour after crime)
+      const investigationDate = new Date('2024-10-15T23:00:00');
+      
       // Try localStorage first
       const localState = loadFromLocalStorage();
       if (localState && localState.caseId === caseId) {
+        // Add investigationStartTime if it doesn't exist (backward compatibility)
+        if (!localState.investigationStartTime) {
+          localState.investigationStartTime = investigationDate.toISOString();
+          saveToLocalStorage(localState);
+        }
         set(localState);
         return;
       }
@@ -55,13 +63,19 @@ function createGameStore() {
       // Then try server
       const savedState = await api.getGameState(SESSION_ID);
       if (savedState && savedState.caseId === caseId) {
+        // Add investigationStartTime if it doesn't exist (backward compatibility)
+        if (!savedState.investigationStartTime) {
+          savedState.investigationStartTime = investigationDate.toISOString();
+        }
         set(savedState);
         saveToLocalStorage(savedState);
       } else {
         const newState = {
           ...initialState,
           caseId,
-          chatHistories: {}
+          chatHistories: {},
+          gameStartTime: new Date().toISOString(),
+          investigationStartTime: investigationDate.toISOString()
         };
         update(() => newState);
         saveToLocalStorage(newState);
@@ -191,9 +205,15 @@ export const uiStore = writable({
   showNotes: false,
   showSettings: false,
   showHowToPlay: false,
+  showCaseSummary: false,
   currentScreen: 'intro' as 'intro' | 'investigation' | 'win',
   loading: false,
-  notification: null as { title: string; description: string } | null
+  notification: null as { title: string; description: string } | null,
+  imageViewer: {
+    show: false,
+    imageSrc: '',
+    caption: ''
+  }
 });
 
 // Derived stores

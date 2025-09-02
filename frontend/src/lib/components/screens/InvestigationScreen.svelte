@@ -2,74 +2,33 @@
   import { gameStore, currentCase, uiStore, discoveredEvidence } from '../../stores/game.store';
   import CharacterList from '../game/CharacterList.svelte';
   import ChatArea from '../game/ChatArea.svelte';
-  import EvidenceModal from '../modals/EvidenceModal.svelte';
-  import NotesModal from '../modals/NotesModal.svelte';
-  import HowToPlayModal from '../modals/HowToPlayModal.svelte';
-  import SettingsModal from '../modals/SettingsModal.svelte';
-  
-  $: evidenceCount = $discoveredEvidence.length;
-  $: milestonesCount = $gameStore.milestonesDiscovered.length;
-  $: hasNewEvidence = evidenceCount > 0 || milestonesCount > 0;
-  
-  function showEvidence() {
-    uiStore.update(s => ({ ...s, showEvidence: true }));
-  }
+  import NotesSidebar from '../ui/NotesSidebar.svelte';
+  import ImageViewerModal from '../modals/ImageViewerModal.svelte';
+  import CaseSummaryModal from '../modals/CaseSummaryModal.svelte';
   
   function showNotes() {
     uiStore.update(s => ({ ...s, showNotes: true }));
   }
-  
-  function showHelp() {
-    uiStore.update(s => ({ ...s, showHowToPlay: true }));
-  }
-  
-  function showSettings() {
-    uiStore.update(s => ({ ...s, showSettings: true }));
-  }
-  
-  function resetGame() {
-    if (confirm('Are you sure you want to reset the game? All progress will be lost.')) {
-      gameStore.reset();
-      uiStore.update(s => ({ ...s, currentScreen: 'intro' }));
-    }
-  }
 </script>
 
-<div class="investigation-screen">
+<div class="investigation-screen" class:notes-open={$uiStore.showNotes}>
   <div class="sidebar">
     <CharacterList />
     
-    <button class="btn-secondary" on:click={showEvidence}>
-      View Evidence
-      {#if hasNewEvidence}
-        <span class="notification-badge">{evidenceCount + milestonesCount}</span>
-      {/if}
-    </button>
-    
-    <button class="btn-secondary" on:click={showNotes}>
-      View Notes
-    </button>
-    
-    <button class="btn-secondary help-btn" on:click={showHelp}>
-      <span>❓</span> Help
-    </button>
-    
-    <button class="btn-secondary settings-btn" on:click={showSettings}>
-      <span>⚙️</span> Settings
-    </button>
-    
-    <button class="btn-secondary reset-btn" on:click={resetGame}>
-      Reset Game
+    <button class="btn-secondary notes-btn" on:click={showNotes}>
+      📝 Detective Notes
     </button>
   </div>
   
-  <ChatArea />
+  <div class="main-content">
+    <ChatArea />
+  </div>
+  
+  <NotesSidebar />
 </div>
 
-<EvidenceModal />
-<NotesModal />
-<HowToPlayModal />
-<SettingsModal />
+<ImageViewerModal />
+<CaseSummaryModal />
 
 <style>
   .investigation-screen {
@@ -77,6 +36,18 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    padding-top: 60px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .main-content {
+    flex: 1;
+    display: flex;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .investigation-screen.notes-open .main-content {
+    margin-right: 400px;
   }
   
   .sidebar {
@@ -92,6 +63,11 @@
   @media (max-width: 768px) {
     .investigation-screen {
       flex-direction: column;
+    }
+    
+    .investigation-screen.notes-open .main-content {
+      margin-right: 0;
+      margin-bottom: 50vh;
     }
     
     .sidebar {
@@ -194,4 +170,5 @@
   .sidebar::-webkit-scrollbar-thumb:hover {
     background: rgba(255,255,255,0.3);
   }
+
 </style>

@@ -1,7 +1,31 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { availableCases, currentCase, gameStore, uiStore } from '../../stores/game.store';
   import { api } from '../../services/api';
   import HowToPlayModal from '../modals/HowToPlayModal.svelte';
+  import MusicWelcomeNudge from '../ui/MusicWelcomeNudge.svelte';
+  
+  let showMusicNudge = false;
+  
+  onMount(() => {
+    // Check if user hasn't been shown the music nudge yet
+    const hasSeenNudge = localStorage.getItem('musicNudgeShown');
+    if (!hasSeenNudge) {
+      // Show the nudge after a short delay for better UX
+      setTimeout(() => {
+        showMusicNudge = true;
+      }, 1500);
+    }
+  });
+  
+  function handleMusicAccept() {
+    // Dispatch event to TopNavTabs to start music
+    window.dispatchEvent(new CustomEvent('startMusic'));
+  }
+  
+  function handleMusicDecline() {
+    // User declined, nothing special to do
+  }
 
   async function startCase(caseId: string) {
     try {
@@ -81,6 +105,11 @@
 </div>
 
 <HowToPlayModal />
+<MusicWelcomeNudge 
+  bind:show={showMusicNudge}
+  onAccept={handleMusicAccept}
+  onDecline={handleMusicDecline}
+/>
 
 <style>
   .intro-screen {
@@ -90,6 +119,7 @@
     justify-content: center;
     min-height: 100vh;
     padding: 2rem;
+    padding-top: calc(60px + 2rem);
     background: radial-gradient(ellipse at center, #2d2d44 0%, #1e1e2e 100%);
   }
 
@@ -149,21 +179,26 @@
   }
 
   .btn-primary {
-    background: linear-gradient(45deg, #ff6b6b, #ff8787);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(124, 58, 237, 0.9));
+    border: 2px solid rgba(139, 92, 246, 0.6);
     color: white;
-    border: none;
     padding: 1rem 2rem;
     font-size: 1.1rem;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
+    font-weight: 600;
     width: 100%;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
   }
 
   .btn-primary:hover:not(:disabled) {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 1), rgba(124, 58, 237, 1));
+    border-color: #8b5cf6;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
   }
 
   .btn-primary:disabled {

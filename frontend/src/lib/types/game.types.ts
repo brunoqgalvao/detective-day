@@ -49,4 +49,6 @@ export interface GameState {
   notes: string;
   gameWon: boolean;
   currentCharacter: string | null;
+  gameStartTime?: string;
+  investigationStartTime?: string;
 }

@@ -30,9 +30,9 @@
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    transform: translateX(400px);
+    transform: translateX(100%);
     opacity: 0;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease-out;
     z-index: 1000;
     max-width: 350px;
     border: 2px solid rgba(255, 255, 255, 0.2);

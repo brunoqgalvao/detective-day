@@ -2,6 +2,7 @@
   import { gameStore, currentCharacterData, currentCase, uiStore, showNotification, SESSION_ID } from '../../stores/game.store';
   import { api } from '../../services/api';
   import ChatMessage from './ChatMessage.svelte';
+  import EvidenceBoard from './EvidenceBoard.svelte';
   import type { ChatMessage as ChatMessageType } from '../../types/game.types';
   
   let message = '';
@@ -98,6 +99,17 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
   }
+
+  function showImageViewer(imageSrc: string, caption: string) {
+    uiStore.update(s => ({
+      ...s,
+      imageViewer: {
+        show: true,
+        imageSrc,
+        caption
+      }
+    }));
+  }
 </script>
 
 <div class="chat-area">
@@ -149,24 +161,7 @@
       </button>
     </div>
   {:else}
-    <div class="chat-welcome">
-      <h2>🔍 Investigation Dashboard</h2>
-      
-      <div class="welcome-section">
-        <h3>📋 Case Summary</h3>
-        <p>Select a character from the sidebar to begin your investigation.</p>
-      </div>
-      
-      <div class="welcome-section">
-        <h3>💡 Quick Tips</h3>
-        <ul>
-          <li>Interview all suspects to gather information</li>
-          <li>Check Evidence & Notes regularly for discoveries</li>
-          <li>Consult the Crime Scene Expert for forensic analysis</li>
-          <li>Present your case to the District Attorney when ready</li>
-        </ul>
-      </div>
-    </div>
+    <EvidenceBoard />
   {/if}
 </div>
 
@@ -311,6 +306,29 @@
   .welcome-section ul {
     margin-left: 1.5rem;
     line-height: 1.8;
+  }
+
+  .crime-scene-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .crime-scene-gallery img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .crime-scene-gallery img:hover {
+    transform: scale(1.05);
+    border-color: rgba(255,215,0,0.5);
+    box-shadow: 0 4px 15px rgba(255,215,0,0.2);
   }
 
   .message {
