@@ -116,8 +116,13 @@ class DetectiveGame {
         const characterList = document.getElementById('character-list');
         characterList.innerHTML = SCENARIO.characters.map(char => `
             <div class="character-card" data-character-id="${char.id}">
-                <div class="character-name">${char.name}</div>
-                <div class="character-role">${char.role} • Age ${char.age}</div>
+                <div class="character-image">
+                    <img src="images/characters/${char.id}.png" alt="${char.name}" onerror="this.style.display='none';">
+                </div>
+                <div class="character-info">
+                    <div class="character-name">${char.name}</div>
+                    <div class="character-role">${char.role} • Age ${char.age}</div>
+                </div>
             </div>
         `).join('');
 
@@ -315,7 +320,7 @@ class DetectiveGame {
         return cheatPatterns.some(pattern => pattern.test(message));
     }
 
-    async getCharacterResponse(userMessage, retryCount = 0) {
+    async getCharacterResponse(userMessage, retryCount = 0, streamingMessageId = null) {
         let systemPrompt = '';
         
         if (this.currentCharacter === 'forensics') {
@@ -668,10 +673,22 @@ Respond "INCONSISTENT" if it violates any rule above.`;
         } else {
             evidenceList.innerHTML = this.evidenceDiscovered.map(id => {
                 const evidence = SCENARIO.evidence.find(e => e.id === id);
+                const hasImage = ['whiskey_glass', 'chemistry_book', 'threatening_note'].includes(id);
+                const imageFileName = id === 'whiskey_glass' ? 'whiskey_glass_evidence' : 
+                                   id === 'chemistry_book' ? 'chemistry_book_evidence' : 
+                                   id === 'threatening_note' ? 'threatening_note_evidence' : id;
+                
                 return `
                     <div class="evidence-item">
-                        <div class="evidence-title">${evidence.name}</div>
-                        <div class="evidence-description">${evidence.description}</div>
+                        ${hasImage ? `
+                            <div class="evidence-image">
+                                <img src="images/crime-scene/${imageFileName}.png" alt="${evidence.name}" onerror="this.style.display='none';">
+                            </div>
+                        ` : ''}
+                        <div class="evidence-content">
+                            <div class="evidence-title">${evidence.name}</div>
+                            <div class="evidence-description">${evidence.description}</div>
+                        </div>
                     </div>
                 `;
             }).join('');
