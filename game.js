@@ -4,6 +4,7 @@ class DetectiveGame {
         this.currentCharacter = null;
         this.chatHistories = {};
         this.evidenceDiscovered = [];
+        this.milestonesDiscovered = [];
         this.notes = '';
         this.gameWon = false;
         this.init();
@@ -30,6 +31,26 @@ class DetectiveGame {
         // Start Investigation
         document.getElementById('start-investigation').addEventListener('click', () => {
             this.showInvestigation();
+        });
+
+        // How to Play button
+        document.getElementById('how-to-play-btn').addEventListener('click', () => {
+            this.showHowToPlay();
+        });
+
+        // Help button (investigation screen)
+        document.getElementById('help-btn').addEventListener('click', () => {
+            this.showHowToPlay();
+        });
+
+        // Settings button
+        document.getElementById('settings-btn').addEventListener('click', () => {
+            this.showSettings();
+        });
+
+        // Update API key button
+        document.getElementById('update-api-key').addEventListener('click', () => {
+            this.updateApiKey();
         });
 
         // Character Selection
@@ -85,6 +106,15 @@ class DetectiveGame {
             });
         });
 
+        // Click outside to close modals
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal && !modal.id.includes('api-key')) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
         // Play Again
         document.getElementById('play-again').addEventListener('click', () => {
             this.resetGame();
@@ -95,6 +125,18 @@ class DetectiveGame {
             if (confirm('Are you sure you want to reset the game? All progress will be lost.')) {
                 this.resetGame();
                 location.reload();
+            }
+        });
+
+        // Milestone notification close
+        document.querySelector('.milestone-close').addEventListener('click', () => {
+            this.hideMilestoneNotification();
+        });
+
+        // Auto-hide milestone notification after 5 seconds
+        document.getElementById('milestone-notification').addEventListener('click', (e) => {
+            if (e.target.id === 'milestone-notification') {
+                this.hideMilestoneNotification();
             }
         });
     }
@@ -140,11 +182,64 @@ class DetectiveGame {
         if (!this.chatHistories.prosecutor) {
             this.chatHistories.prosecutor = [];
         }
+        
+        // Update notification badges on startup
+        this.updateNotificationBadges();
     }
 
     showInvestigation() {
         document.getElementById('intro-screen').classList.remove('active');
         document.getElementById('investigation-screen').classList.add('active');
+    }
+
+    showHowToPlay() {
+        document.getElementById('how-to-play-modal').classList.add('active');
+    }
+
+    showSettings() {
+        const modal = document.getElementById('settings-modal');
+        const apiKeyInput = document.getElementById('settings-api-key');
+        
+        // Show current API key (masked)
+        if (this.apiKey) {
+            apiKeyInput.value = this.apiKey.substring(0, 10) + '...' + this.apiKey.substring(this.apiKey.length - 4);
+        }
+        
+        modal.classList.add('active');
+    }
+
+    updateApiKey() {
+        const newApiKey = document.getElementById('settings-api-key').value.trim();
+        
+        if (newApiKey && !newApiKey.includes('...')) {
+            // Only update if it's a new key (not the masked display)
+            this.apiKey = newApiKey;
+            localStorage.setItem('anthropic_api_key', newApiKey);
+            
+            // Show success feedback
+            const updateBtn = document.getElementById('update-api-key');
+            const originalText = updateBtn.textContent;
+            updateBtn.textContent = 'Updated!';
+            updateBtn.style.backgroundColor = '#4ecdc4';
+            
+            setTimeout(() => {
+                updateBtn.textContent = originalText;
+                updateBtn.style.backgroundColor = '';
+                document.getElementById('settings-modal').classList.remove('active');
+            }, 1500);
+        }
+    }
+
+    showImageViewer(imageSrc, caption) {
+        const modal = document.getElementById('image-viewer-modal');
+        const img = document.getElementById('viewer-image');
+        const captionDiv = document.getElementById('viewer-caption');
+        
+        img.src = imageSrc;
+        img.alt = caption;
+        captionDiv.textContent = caption;
+        
+        modal.classList.add('active');
     }
 
     selectCharacter(characterId) {
@@ -157,8 +252,22 @@ class DetectiveGame {
         });
         document.querySelector(`[data-character-id="${characterId}"]`).classList.add('active');
         
-        // Setup chat
+        // Show chat header and input area
+        document.querySelector('.chat-header').style.display = 'flex';
+        document.querySelector('.chat-input-area').style.display = 'flex';
+        
+        // Setup chat with character image
         document.getElementById('chat-title').textContent = `Interview: ${character.name}`;
+        const chatImage = document.getElementById('chat-character-image');
+        chatImage.src = `images/characters/${characterId}.png`;
+        chatImage.alt = character.name;
+        chatImage.style.display = 'block';
+        chatImage.onclick = () => this.showImageViewer(`images/characters/${characterId}.png`, character.name);
+        
+        // Hide welcome content when character selected
+        const welcomeContent = document.getElementById('chat-welcome');
+        if (welcomeContent) welcomeContent.style.display = 'none';
+        
         this.loadChatHistory(characterId);
         this.enableChat();
 
@@ -174,11 +283,29 @@ class DetectiveGame {
             card.classList.remove('active');
         });
         
+        // Show chat header and input area
+        document.querySelector('.chat-header').style.display = 'flex';
+        document.querySelector('.chat-input-area').style.display = 'flex';
+        
+        const chatImage = document.getElementById('chat-character-image');
+        
         if (type === 'forensics') {
             document.getElementById('chat-title').textContent = 'Crime Scene Expert: Dr. Sarah Mitchell';
+            chatImage.src = 'images/characters/forensics.png';
+            chatImage.alt = 'Dr. Sarah Mitchell';
+            chatImage.style.display = 'block';
+            chatImage.onclick = () => this.showImageViewer('images/characters/forensics.png', 'Dr. Sarah Mitchell');
         } else if (type === 'prosecutor') {
             document.getElementById('chat-title').textContent = 'District Attorney: Patricia Hayes';
+            chatImage.src = 'images/characters/prosecutor.png';
+            chatImage.alt = 'Patricia Hayes';
+            chatImage.style.display = 'block';
+            chatImage.onclick = () => this.showImageViewer('images/characters/prosecutor.png', 'Patricia Hayes');
         }
+        
+        // Hide welcome content when special character selected
+        const welcomeContent = document.getElementById('chat-welcome');
+        if (welcomeContent) welcomeContent.style.display = 'none';
         
         this.loadChatHistory(type);
         this.enableChat();
@@ -190,7 +317,24 @@ class DetectiveGame {
         
         console.log(`Loading chat history for ${characterId}:`, messages);
         
-        chatMessages.innerHTML = messages.map(msg => {
+        // Hide welcome content without removing it
+        const welcomeContent = document.getElementById('chat-welcome');
+        if (welcomeContent) {
+            welcomeContent.style.display = 'none';
+        }
+        
+        // Create a container for chat messages if it doesn't exist
+        let chatContainer = document.getElementById('chat-messages-container');
+        if (!chatContainer) {
+            chatContainer = document.createElement('div');
+            chatContainer.id = 'chat-messages-container';
+            chatMessages.appendChild(chatContainer);
+        }
+        
+        // Show the chat container
+        chatContainer.style.display = 'block';
+        
+        chatContainer.innerHTML = messages.map(msg => {
             // Ensure we have valid role and content
             const role = msg.role || 'assistant';
             const content = msg.content || '';
@@ -213,7 +357,7 @@ class DetectiveGame {
             // Add initial message for characters
             const character = SCENARIO.characters.find(c => c.id === characterId);
             if (character) {
-                chatMessages.innerHTML = `
+                chatContainer.innerHTML = `
                     <div class="message system">
                         You are now interviewing ${character.name}, ${character.role}.
                     </div>
@@ -233,9 +377,27 @@ class DetectiveGame {
     closeChat() {
         this.currentCharacter = null;
         document.getElementById('chat-title').textContent = 'Select someone to interview';
-        document.getElementById('chat-messages').innerHTML = '';
+        document.getElementById('chat-character-image').style.display = 'none';
+        
+        // Hide chat header and input area for empty state
+        document.querySelector('.chat-header').style.display = 'none';
+        document.querySelector('.chat-input-area').style.display = 'none';
+        
+        // Remove the chat messages container entirely so it gets recreated fresh next time
+        const chatContainer = document.getElementById('chat-messages-container');
+        if (chatContainer) {
+            chatContainer.remove();
+        }
+        
+        // Show welcome content
+        const welcomeContent = document.getElementById('chat-welcome');
+        if (welcomeContent) {
+            welcomeContent.style.display = 'flex';
+        }
+        
         document.getElementById('chat-input').disabled = true;
         document.getElementById('send-btn').disabled = true;
+        document.getElementById('chat-input').value = '';
         document.querySelectorAll('.character-card').forEach(card => {
             card.classList.remove('active');
         });
@@ -258,14 +420,21 @@ class DetectiveGame {
         this.addMessage('user', message, true);
         
         // Show loading indicator (create directly, don't use addMessage to avoid formatting issues)
-        const messagesDiv = document.getElementById('chat-messages');
+        let chatContainer = document.getElementById('chat-messages-container');
+        if (!chatContainer) {
+            const messagesDiv = document.getElementById('chat-messages');
+            chatContainer = document.createElement('div');
+            chatContainer.id = 'chat-messages-container';
+            messagesDiv.appendChild(chatContainer);
+        }
+        
         const loadingId = `msg-${Date.now()}`;
         const loadingDiv = document.createElement('div');
         loadingDiv.className = 'message assistant';
         loadingDiv.id = loadingId;
         loadingDiv.innerHTML = '<div class="loading-message"><span class="loading"></span><span style="margin-left: 10px; opacity: 0.7;">Thinking...</span></div>';
-        messagesDiv.appendChild(loadingDiv);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        chatContainer.appendChild(loadingDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
         
         try {
             // Check for cheat attempts
@@ -293,6 +462,9 @@ class DetectiveGame {
             
             // Extract evidence mentions
             this.checkForEvidence(response);
+            
+            // Check for milestone discoveries
+            await this.checkForMilestones(response);
             
         } catch (error) {
             console.error('Error:', error);
@@ -451,9 +623,15 @@ class DetectiveGame {
             knownFacts = characterKnowledge.map(f => f.fact).join('\n');
         }
         
+        // Get the user's last message to check relevance
+        const lastUserMessage = this.chatHistories[this.currentCharacter].slice(-1)[0]?.content || '';
+        
         const checkPrompt = `You are a strict consistency checker for a murder mystery game.
 
 ${characterInfo}
+
+User's question that prompted this response:
+"${lastUserMessage}"
 
 FACTS THIS CHARACTER KNOWS:
 ${knownFacts}
@@ -463,6 +641,7 @@ CRITICAL RULES:
 2. They should NOT know facts that aren't in their list
 3. They should NOT invent new specific details (times, places, events) not mentioned
 4. Character identities must be correct: Marcus=SON, Robert=BUTLER
+5. Information should be RELEVANT to the question asked (with exceptions below)
 
 Response to check:
 "${response}"
@@ -472,8 +651,12 @@ Check for these violations:
 2. Does it invent new specific details not in the facts?
 3. Does it misidentify any character roles?
 4. Does it contradict any established facts?
+5. Does it volunteer completely unrelated information without motivation?
+   - Exception: Characters MAY subtly deflect suspicion (mentioning others' suspicious behavior)
+   - Exception: Characters MAY establish alibis (mentioning who they were with)
+   - But random facts like "he studied chemistry" when asked about alibis = INCONSISTENT
 
-Respond "CONSISTENT" if the response only uses known facts correctly.
+Respond "CONSISTENT" if the response follows all rules.
 Respond "INCONSISTENT" if it violates any rule above.`;
 
         const checkResponse = await fetch('https://api.anthropic.com/v1/messages', {
@@ -589,7 +772,15 @@ Respond "INCONSISTENT" if it violates any rule above.`;
     }
 
     addMessage(role, content, saveToHistory = true) {
-        const messagesDiv = document.getElementById('chat-messages');
+        // Get or create the chat container
+        let chatContainer = document.getElementById('chat-messages-container');
+        if (!chatContainer) {
+            const messagesDiv = document.getElementById('chat-messages');
+            chatContainer = document.createElement('div');
+            chatContainer.id = 'chat-messages-container';
+            messagesDiv.appendChild(chatContainer);
+        }
+        
         const messageId = `msg-${Date.now()}`;
         
         const messageDiv = document.createElement('div');
@@ -600,8 +791,8 @@ Respond "INCONSISTENT" if it violates any rule above.`;
         const formattedContent = this.formatMessageContent(content, role);
         messageDiv.innerHTML = formattedContent;
         
-        messagesDiv.appendChild(messageDiv);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
         
         // Save to history if requested
         if (saveToHistory) {
@@ -664,14 +855,99 @@ Respond "INCONSISTENT" if it violates any rule above.`;
         });
     }
 
+    async checkForMilestones(response) {
+        const newMilestones = [];
+        
+        // Check each milestone against the response
+        for (const [id, milestone] of Object.entries(DISCOVERY_MILESTONES)) {
+            // Skip already discovered milestones
+            if (this.milestonesDiscovered.includes(id)) continue;
+            
+            // Use AI classifier to determine if milestone was discovered
+            const discovered = await this.classifyMilestoneDiscovery(response, milestone);
+            
+            if (discovered) {
+                this.milestonesDiscovered.push(id);
+                newMilestones.push(milestone);
+                
+                // Show notification for the discovery
+                this.showMilestoneNotification(milestone);
+                
+                // Update UI badges
+                this.updateNotificationBadges();
+            }
+        }
+        
+        if (newMilestones.length > 0) {
+            this.saveGameState();
+        }
+        
+        return newMilestones;
+    }
+
+    async classifyMilestoneDiscovery(response, milestone) {
+        try {
+            // Create a focused prompt to detect if this specific milestone was revealed
+            const classificationPrompt = `You are analyzing a detective game dialogue to detect if specific information was revealed.
+
+MILESTONE TO DETECT: "${milestone.title}"
+DESCRIPTION: ${milestone.description}
+KEYWORDS: ${milestone.keywords.join(', ')}
+
+DIALOGUE RESPONSE TO ANALYZE:
+"${response}"
+
+INSTRUCTIONS:
+- Respond "YES" if the dialogue clearly reveals or confirms this specific information
+- Respond "NO" if the information is not mentioned or only vaguely hinted at
+- Be precise - only detect clear revelations of this exact information
+
+RESPONSE:`;
+
+            const classificationResponse = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': this.apiKey,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true'
+                },
+                body: JSON.stringify({
+                    model: 'claude-3-5-sonnet-20241022',
+                    messages: [{ role: 'user', content: classificationPrompt }],
+                    max_tokens: 5,
+                    temperature: 0
+                })
+            });
+
+            if (!classificationResponse.ok) {
+                return false; // Default to no discovery if classification fails
+            }
+
+            const data = await classificationResponse.json();
+            const result = data.content[0].text.trim().toUpperCase();
+            
+            return result === 'YES';
+            
+        } catch (error) {
+            console.error('Milestone classification error:', error);
+            return false;
+        }
+    }
+
     showEvidence() {
         const modal = document.getElementById('evidence-modal');
         const evidenceList = document.getElementById('evidence-list');
         
-        if (this.evidenceDiscovered.length === 0) {
-            evidenceList.innerHTML = '<p>No evidence collected yet. Interview suspects to gather clues.</p>';
-        } else {
-            evidenceList.innerHTML = this.evidenceDiscovered.map(id => {
+        // Clear notification badges when viewing evidence
+        document.getElementById('evidence-badge').style.display = 'none';
+        
+        let content = '';
+        
+        // Show traditional evidence items
+        if (this.evidenceDiscovered.length > 0) {
+            content += '<h4 style="color: #4ecdc4; margin-bottom: 1rem;">🔬 Physical Evidence</h4>';
+            content += this.evidenceDiscovered.map(id => {
                 const evidence = SCENARIO.evidence.find(e => e.id === id);
                 const hasImage = ['whiskey_glass', 'chemistry_book', 'threatening_note'].includes(id);
                 const imageFileName = id === 'whiskey_glass' ? 'whiskey_glass_evidence' : 
@@ -694,11 +970,124 @@ Respond "INCONSISTENT" if it violates any rule above.`;
             }).join('');
         }
         
+        // Show discovered milestones organized by category
+        if (this.milestonesDiscovered.length > 0) {
+            content += '<h4 style="color: #ffd700; margin: 2rem 0 1rem 0;">🔍 Investigation Discoveries</h4>';
+            
+            // Group milestones by category
+            const categorizedMilestones = {};
+            this.milestonesDiscovered.forEach(milestoneId => {
+                const milestone = DISCOVERY_MILESTONES[milestoneId];
+                if (!categorizedMilestones[milestone.category]) {
+                    categorizedMilestones[milestone.category] = [];
+                }
+                categorizedMilestones[milestone.category].push(milestone);
+            });
+            
+            // Display milestones by category
+            Object.entries(categorizedMilestones).forEach(([categoryKey, milestones]) => {
+                const category = MILESTONE_CATEGORIES[categoryKey];
+                content += `<div class="milestone-category">
+                    <h5 style="color: ${category.color}; margin: 1rem 0 0.5rem 0;">${category.icon} ${category.name}</h5>
+                `;
+                
+                milestones.forEach(milestone => {
+                    const importance = MILESTONE_IMPORTANCE[milestone.importance];
+                    content += `
+                        <div class="evidence-item milestone-item">
+                            <div class="milestone-indicator" style="background-color: ${importance.color}"></div>
+                            <div class="evidence-content">
+                                <div class="evidence-title" style="color: ${category.color}">${milestone.title}</div>
+                                <div class="evidence-description">${milestone.description}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                content += '</div>';
+            });
+        }
+        
+        if (this.evidenceDiscovered.length === 0 && this.milestonesDiscovered.length === 0) {
+            content = '<p>No evidence or discoveries made yet. Interview suspects to gather clues and uncover information.</p>';
+        }
+        
+        evidenceList.innerHTML = content;
         modal.classList.add('active');
+    }
+
+    showMilestoneNotification(milestone) {
+        const notification = document.getElementById('milestone-notification');
+        const category = MILESTONE_CATEGORIES[milestone.category] || MILESTONE_CATEGORIES.behavior;
+        
+        // Update notification content
+        document.querySelector('.milestone-icon').textContent = category.icon;
+        document.querySelector('.milestone-title').textContent = milestone.title;
+        document.querySelector('.milestone-description').textContent = milestone.description;
+        
+        // Show notification with animation
+        notification.classList.add('show');
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            this.hideMilestoneNotification();
+        }, 5000);
+        
+        // Play discovery sound (if supported)
+        this.playDiscoverySound();
+    }
+
+    hideMilestoneNotification() {
+        const notification = document.getElementById('milestone-notification');
+        notification.classList.remove('show');
+    }
+
+    updateNotificationBadges() {
+        const evidenceBadge = document.getElementById('evidence-badge');
+        const notesBadge = document.getElementById('notes-badge');
+        
+        // Show badge with number of new discoveries
+        const newDiscoveries = this.milestonesDiscovered.length;
+        
+        if (newDiscoveries > 0) {
+            evidenceBadge.textContent = newDiscoveries;
+            evidenceBadge.style.display = 'inline-block';
+            notesBadge.textContent = newDiscoveries;
+            notesBadge.style.display = 'inline-block';
+        }
+    }
+
+    playDiscoverySound() {
+        // Create a short success tone using Web Audio API
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(1200, audioContext.currentTime + 0.1);
+            oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.2);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        } catch (error) {
+            // Fallback: no sound if Web Audio API not supported
+            console.log('Audio not supported');
+        }
     }
 
     showNotes() {
         const modal = document.getElementById('notes-modal');
+        
+        // Clear notification badges when viewing notes  
+        document.getElementById('notes-badge').style.display = 'none';
+        
         document.getElementById('notes-area').value = this.notes;
         modal.classList.add('active');
     }
@@ -738,6 +1127,7 @@ Respond "INCONSISTENT" if it violates any rule above.`;
         const gameState = {
             chatHistories: this.chatHistories,
             evidenceDiscovered: this.evidenceDiscovered,
+            milestonesDiscovered: this.milestonesDiscovered,
             notes: this.notes,
             gameWon: this.gameWon
         };
@@ -758,6 +1148,9 @@ Respond "INCONSISTENT" if it violates any rule above.`;
                 if (gameState.evidenceDiscovered) {
                     this.evidenceDiscovered = gameState.evidenceDiscovered;
                 }
+                if (gameState.milestonesDiscovered) {
+                    this.milestonesDiscovered = gameState.milestonesDiscovered;
+                }
                 if (gameState.notes !== undefined) {
                     this.notes = gameState.notes;
                 }
@@ -771,6 +1164,7 @@ Respond "INCONSISTENT" if it violates any rule above.`;
     resetGame() {
         this.chatHistories = {};
         this.evidenceDiscovered = [];
+        this.milestonesDiscovered = [];
         this.notes = '';
         this.gameWon = false;
         localStorage.removeItem('detective_game_state');

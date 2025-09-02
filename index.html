@@ -16,7 +16,10 @@
                     <img src="images/crime-scene/manor_exterior.png" alt="Westwood Manor at night" onerror="this.style.display='none';">
                 </div>
                 <div class="case-details"></div>
-                <button id="start-investigation" class="btn-primary">Begin Investigation</button>
+                <div class="intro-buttons">
+                    <button id="start-investigation" class="btn-primary">Begin Investigation</button>
+                    <button id="how-to-play-btn" class="btn-secondary">How to Play</button>
+                </div>
             </div>
         </div>
 
@@ -34,18 +37,70 @@
                         District Attorney
                     </button>
                 </div>
-                <button id="view-evidence" class="btn-secondary">View Evidence</button>
-                <button id="view-notes" class="btn-secondary">View Notes</button>
+                <button id="view-evidence" class="btn-secondary">
+                    View Evidence
+                    <span class="notification-badge" id="evidence-badge" style="display: none;"></span>
+                </button>
+                <button id="view-notes" class="btn-secondary">
+                    View Notes
+                    <span class="notification-badge" id="notes-badge" style="display: none;"></span>
+                </button>
+                <button id="help-btn" class="btn-secondary" style="background: rgba(102,126,234,0.1); border-color: rgba(102,126,234,0.3);">
+                    <span style="margin-right: 0.3rem;">❓</span> Help
+                </button>
+                <button id="settings-btn" class="btn-secondary" style="background: rgba(156,163,175,0.1); border-color: rgba(156,163,175,0.3);">
+                    <span style="margin-right: 0.3rem;">⚙️</span> Settings
+                </button>
                 <button id="reset-game" class="btn-secondary" style="margin-top: 1rem; background: rgba(255,107,107,0.1); border-color: rgba(255,107,107,0.3);">Reset Game</button>
             </div>
 
             <div class="chat-area">
-                <div class="chat-header">
-                    <h3 id="chat-title">Select someone to interview</h3>
+                <div class="chat-header" style="display: none;">
+                    <div class="chat-header-content">
+                        <img id="chat-character-image" class="chat-character-image" src="" alt="" style="display: none;">
+                        <h3 id="chat-title">Select someone to interview</h3>
+                    </div>
                     <button id="close-chat" class="close-btn">×</button>
                 </div>
-                <div id="chat-messages" class="chat-messages"></div>
-                <div class="chat-input-area">
+                <div id="chat-messages" class="chat-messages">
+                    <div id="chat-welcome" class="chat-welcome">
+                        <h2>🔍 Investigation Dashboard</h2>
+                        
+                        <div class="welcome-section">
+                            <h3>📋 Case Summary</h3>
+                            <p><strong>Victim:</strong> Victor Westwood, 52, wealthy tech entrepreneur</p>
+                            <p><strong>Time of Death:</strong> Between 10:00-10:30 PM</p>
+                            <p><strong>Cause:</strong> Cyanide poisoning via whiskey</p>
+                            <p><strong>Location:</strong> His private study at Westwood Manor</p>
+                        </div>
+
+                        <div class="welcome-section">
+                            <h3>🏚️ Crime Scene</h3>
+                            <div class="crime-scene-gallery">
+                                <img src="images/crime-scene/crime_scene_overview.png" alt="Crime Scene" onclick="game.showImageViewer('images/crime-scene/crime_scene_overview.png', 'Crime Scene - Victor\'s Study')">
+                                <img src="images/crime-scene/whiskey_glass_evidence.png" alt="Poisoned Whiskey" onclick="game.showImageViewer('images/crime-scene/whiskey_glass_evidence.png', 'Evidence - Poisoned Whiskey Glass')">
+                                <img src="images/crime-scene/study_desk_detail.png" alt="Desk Detail" onclick="game.showImageViewer('images/crime-scene/study_desk_detail.png', 'Victor\'s Desk')">
+                            </div>
+                        </div>
+
+                        <div class="welcome-section">
+                            <h3>💡 Quick Tips</h3>
+                            <ul>
+                                <li>Select a character from the left to begin interviewing</li>
+                                <li>Check Evidence & Notes regularly for discoveries</li>
+                                <li>Consult the Crime Scene Expert for forensic analysis</li>
+                                <li>Present your case to the District Attorney when ready</li>
+                            </ul>
+                        </div>
+
+                        <div class="welcome-section">
+                            <p style="text-align: center; opacity: 0.7; margin-top: 2rem;">
+                                Select someone to interview from the sidebar to begin your investigation
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-area" style="display: none;">
                     <input type="text" id="chat-input" placeholder="Type your question..." disabled>
                     <button id="send-btn" disabled>Send</button>
                 </div>
@@ -88,9 +143,109 @@
         </div>
     </div>
 
+    <!-- How to Play Modal -->
+    <div id="how-to-play-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal">×</button>
+            <h2>🕵️ How to Play Detective Day</h2>
+            
+            <div class="how-to-section">
+                <h3>🎯 Your Objective</h3>
+                <p>Solve the murder of Victor Westwood by gathering enough evidence to identify and prosecute the killer.</p>
+            </div>
+
+            <div class="how-to-section">
+                <h3>🔍 Investigation Process</h3>
+                <ul>
+                    <li><strong>Interview Suspects:</strong> Click on any character to interview them. Ask about their whereabouts, relationships, and observations.</li>
+                    <li><strong>Gather Evidence:</strong> Physical evidence and discoveries will be automatically collected as you uncover them during interviews.</li>
+                    <li><strong>Track Progress:</strong> Watch for notification popups when you discover important information. Check your Evidence book regularly.</li>
+                    <li><strong>Take Notes:</strong> Use the Notes feature to track your theories and connect the dots.</li>
+                </ul>
+            </div>
+
+            <div class="how-to-section">
+                <h3>🔬 Special Consultants</h3>
+                <ul>
+                    <li><strong>Crime Scene Expert:</strong> Consult Dr. Sarah Mitchell for forensic analysis and technical evidence interpretation.</li>
+                    <li><strong>District Attorney:</strong> When ready, present your case to Patricia Hayes. She'll determine if you have enough evidence to prosecute.</li>
+                </ul>
+            </div>
+
+            <div class="how-to-section win-conditions">
+                <h3>🏆 How to Win</h3>
+                <p>There are two paths to victory:</p>
+                <ol>
+                    <li><strong>Confession:</strong> Confront the killer with overwhelming evidence during interrogation to trigger a confession.</li>
+                    <li><strong>Prosecution:</strong> Convince the District Attorney that you have sufficient evidence to prosecute. You'll need:
+                        <ul>
+                            <li>Clear identification of the murderer</li>
+                            <li>Evidence of motive (why they did it)</li>
+                            <li>Evidence of means (how they could do it)</li>
+                            <li>Evidence of opportunity (when they could do it)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="how-to-section">
+                <h3>💡 Investigation Tips</h3>
+                <ul>
+                    <li>Pay attention to timeline inconsistencies - alibis matter!</li>
+                    <li>Everyone has secrets - not all are related to the murder</li>
+                    <li>Cross-reference statements between suspects</li>
+                    <li>The murder method (poison) requires specific knowledge and access</li>
+                    <li>Check the Evidence book for discovered milestones organized by category</li>
+                    <li>Don't rush to the prosecutor - gather solid evidence first</li>
+                </ul>
+            </div>
+
+            <button class="btn-primary close-modal">Start Investigating</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Settings</h2>
+            <div class="settings-section">
+                <h3>API Configuration</h3>
+                <label for="settings-api-key">Anthropic API Key:</label>
+                <div class="api-key-input-group">
+                    <input type="password" id="settings-api-key" placeholder="sk-ant-...">
+                    <button id="update-api-key" class="btn-secondary">Update</button>
+                </div>
+                <p class="small-text">Your API key is stored locally and never sent to any server except Anthropic's.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Viewer Modal -->
+    <div id="image-viewer-modal" class="modal">
+        <div class="image-viewer-content">
+            <button class="close-modal">×</button>
+            <img id="viewer-image" src="" alt="">
+            <div id="viewer-caption"></div>
+        </div>
+    </div>
+
+    <!-- Milestone Discovery Notification -->
+    <div id="milestone-notification" class="milestone-notification">
+        <div class="milestone-content">
+            <div class="milestone-icon">🔍</div>
+            <div class="milestone-text">
+                <div class="milestone-title">Discovery Made!</div>
+                <div class="milestone-description"></div>
+            </div>
+            <div class="milestone-close">×</div>
+        </div>
+    </div>
+
     <script src="facts-database.js"></script>
     <script src="character-timelines.js"></script>
     <script src="scenario.js"></script>
+    <script src="milestones.js"></script>
     <script src="game.js"></script>
 </body>
 </html>
