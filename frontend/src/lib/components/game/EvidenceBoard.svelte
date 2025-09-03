@@ -177,6 +177,8 @@
     display: flex;
     gap: 1rem;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   
   .action-btn {
@@ -218,6 +220,7 @@
     position: relative;
     padding: 2rem;
     min-height: calc(100vh - 200px);
+    min-height: calc(100dvh - 200px);
   }
   
   .board-background {
@@ -461,7 +464,9 @@
     }
     
     .board-header {
-      padding: 1.5rem 1rem 1rem;
+      padding: 1.25rem 1rem 0.75rem;
+      gap: 0.5rem;
+      flex-direction: column;
     }
     
     .cork-board {

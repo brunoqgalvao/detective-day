@@ -178,4 +178,10 @@
       font-size: 0.9rem;
     }
   }
+
+  @media (max-width: 768px) {
+    .clock-label {
+      display: none;
+    }
+  }
 </style>

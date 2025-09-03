@@ -203,6 +203,7 @@ export const availableCases = writable<Array<{ id: string; title: string; descri
 export const uiStore = writable({
   showEvidence: false,
   showNotes: false,
+  showCharacters: false,
   showSettings: false,
   showHowToPlay: false,
   showCaseSummary: false,

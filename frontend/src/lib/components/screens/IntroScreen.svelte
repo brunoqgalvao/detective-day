@@ -118,6 +118,8 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     padding: 2rem;
     padding-top: calc(60px + 2rem);
     background: radial-gradient(ellipse at center, #2d2d44 0%, #1e1e2e 100%);
@@ -273,5 +275,31 @@
   
   .btn-secondary:hover {
     background: rgba(255,255,255,0.2);
+  }
+
+  @media (max-width: 768px) {
+    .intro-screen {
+      padding: 1rem;
+      padding-top: calc(60px + 1rem);
+    }
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+    }
+    h2 {
+      font-size: 1.6rem;
+    }
+    .cases-container {
+      padding: 1.25rem;
+    }
+    .case-details {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 420px) {
+    h1 {
+      font-size: 2rem;
+    }
   }
 </style>

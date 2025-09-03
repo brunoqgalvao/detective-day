@@ -49,7 +49,32 @@
     background-attachment: fixed;
     color: #e0e0e0;
     min-height: 100vh;
+    min-height: 100dvh;
     margin: 0;
     padding: 0;
+  }
+
+  @media (max-width: 768px) {
+    :global(body) {
+      /* Avoid iOS Safari layout quirks with fixed backgrounds */
+      background-attachment: scroll;
+    }
+  }
+
+  /* Ensure app content can stretch to full viewport */
+  :global(#app) {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
   }
 </style>

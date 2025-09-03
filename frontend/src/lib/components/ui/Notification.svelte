@@ -102,4 +102,12 @@
     background: rgba(255, 255, 255, 0.2);
     color: white;
   }
+  @media (max-width: 768px) {
+    .notification {
+      top: 76px; /* sit below the fixed header */
+      right: 12px;
+      left: 12px;
+      max-width: none;
+    }
+  }
 </style>

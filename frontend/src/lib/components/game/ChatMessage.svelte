@@ -86,4 +86,10 @@
       transform: translateY(0);
     }
   }
+
+  @media (max-width: 768px) {
+    .message {
+      max-width: 90%;
+    }
+  }
 </style>

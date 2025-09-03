@@ -234,6 +234,7 @@
     gap: 1rem;
     background: rgba(0,0,0,0.5);
     border-top: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
   }
 
   input {
@@ -402,6 +403,7 @@
     
     .chat-input-area {
       padding: 1rem;
+      padding-bottom: calc(1rem + env(safe-area-inset-bottom));
     }
     
     .message {

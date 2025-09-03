@@ -9,12 +9,17 @@
   function showNotes() {
     uiStore.update(s => ({ ...s, showNotes: true }));
   }
+
+  function closeCharacters() {
+    uiStore.update(s => ({ ...s, showCharacters: false }));
+  }
 </script>
 
 <div class="investigation-screen" class:notes-open={$uiStore.showNotes}>
-  <div class="sidebar">
+  <div class="sidebar" class:open={$uiStore.showCharacters}>
     <CharacterList />
     
+    <button class="close-sidebar" on:click={closeCharacters}>×</button>
     <button class="btn-secondary notes-btn" on:click={showNotes}>
       📝 Detective Notes
     </button>
@@ -25,6 +30,9 @@
   </div>
   
   <NotesSidebar />
+  {#if $uiStore.showCharacters}
+    <div class="sidebar-backdrop" on:click={closeCharacters}></div>
+  {/if}
 </div>
 
 <ImageViewerModal />
@@ -33,8 +41,10 @@
 <style>
   .investigation-screen {
     display: flex;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
+    height: 100svh;
+    height: 100dvh;
     overflow: hidden;
     padding-top: 60px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -58,24 +68,73 @@
     overflow-y: auto;
     border-right: 1px solid rgba(255,255,255,0.1);
     flex-shrink: 0;
+    position: relative;
   }
   
   @media (max-width: 768px) {
     .investigation-screen {
       flex-direction: column;
+      height: 100vh;
+      height: 100svh;
+      height: 100dvh;
+      min-height: unset;
     }
     
     .investigation-screen.notes-open .main-content {
       margin-right: 0;
       margin-bottom: 50vh;
     }
+    /* Ensure chat area fills remaining space on mobile */
+    .main-content {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
     
     .sidebar {
-      width: 100%;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 85vw;
+      max-width: 420px;
+      height: calc(100vh - 60px);
+      height: calc(100svh - 60px);
+      height: calc(100dvh - 60px);
       min-width: unset;
-      border-right: none;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      max-height: 40vh;
+      border-right: 1px solid rgba(139,92,246,0.3);
+      border-bottom: none;
+      max-height: none;
+      background: linear-gradient(135deg, rgba(15, 15, 25, 0.98), rgba(30, 30, 46, 0.98));
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1800;
+      box-shadow: 6px 0 24px rgba(0,0,0,0.5);
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .close-sidebar {
+      display: inline-flex;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 36px;
+      height: 36px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #e0e0e0;
+      cursor: pointer;
+    }
+    .sidebar-backdrop {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1700;
     }
   }
   

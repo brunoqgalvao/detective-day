@@ -94,6 +94,7 @@ Tip: Press Ctrl+S to save manually"
     right: -400px;
     width: 400px;
     height: calc(100vh - 60px);
+    height: calc(100dvh - 60px);
     background: linear-gradient(135deg, rgba(15, 15, 25, 0.98), rgba(30, 30, 46, 0.98));
     backdrop-filter: blur(20px);
     border-left: 2px solid rgba(139, 92, 246, 0.3);

@@ -47,6 +47,8 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     padding: 2rem;
     padding-top: calc(60px + 2rem);
     background: radial-gradient(ellipse at center, #2d2d44 0%, #1e1e2e 100%);
@@ -96,5 +98,21 @@
   .btn-primary:hover {
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+  }
+
+  @media (max-width: 768px) {
+    .win-screen {
+      padding: 1rem;
+      padding-top: calc(60px + 1rem);
+    }
+    .win-content {
+      padding: 1.5rem;
+    }
+    h1 {
+      font-size: 2.2rem;
+    }
+    .win-message {
+      font-size: 1rem;
+    }
   }
 </style>

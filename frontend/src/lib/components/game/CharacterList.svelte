@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentCase, gameStore } from '../../stores/game.store';
+  import { currentCase, gameStore, uiStore } from '../../stores/game.store';
   import type { Character } from '../../types/game.types';
   
   $: characters = $currentCase?.characters || [];
@@ -8,6 +8,8 @@
   
   function selectCharacter(characterId: string) {
     gameStore.selectCharacter(characterId);
+    // Close the mobile characters sidebar after selecting
+    uiStore.update(s => ({ ...s, showCharacters: false }));
   }
   
   function hasBeenInterviewed(characterId: string): boolean {
@@ -189,5 +191,23 @@
 
   .special-btn .icon {
     font-size: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .character-card {
+      padding: 0.75rem;
+      gap: 0.75rem;
+    }
+    .character-image {
+      width: 48px;
+      height: 48px;
+    }
+    h3 {
+      font-size: 1.1rem;
+    }
+    .special-btn {
+      padding: 0.85rem;
+      font-size: 0.95rem;
+    }
   }
 </style>

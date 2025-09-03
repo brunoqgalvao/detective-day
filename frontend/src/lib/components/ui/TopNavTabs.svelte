@@ -135,6 +135,20 @@
     
     <div class="header-tabs">
       <button 
+        class="header-tab people-tab"
+        class:active={$uiStore.showCharacters}
+        on:click={() => uiStore.update(s => ({ ...s, showCharacters: !s.showCharacters }))}
+        title="People"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+        <span class="tab-label">People</span>
+      </button>
+      <button 
         class="header-tab music-tab"
         class:active={showVolumeControl}
         on:click={() => {
@@ -346,6 +360,8 @@
     height: 40px;
     backdrop-filter: blur(10px);
   }
+  /* Hide People tab by default (desktop) */
+  .people-tab { display: none; }
   
   .header-tab:hover {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(30, 30, 46, 0.9));
@@ -580,19 +596,56 @@
   }
   
   @media (max-width: 768px) {
-    .tab {
-      padding: 6px 12px;
-      font-size: 12px;
+    .header-bar {
+      padding: 0 1rem;
+      height: 56px;
     }
-    
-    .tab svg {
+    /* Hide logo and title to reduce crowding on mobile */
+    .game-title,
+    .game-logo { display: none; }
+    .header-right {
+      gap: 0.75rem;
+    }
+    .header-tab {
+      padding: 6px 10px;
+      font-size: 12px;
+      height: 36px;
+    }
+    /* Icon-only tabs to reduce crowding */
+    .tab-label { display: none; }
+    /* Show People tab on mobile and place first */
+    .people-tab { display: flex; order: -1; }
+    .people-tab {
+      order: -1;
+    }
+    .header-tab svg {
       width: 16px;
       height: 16px;
     }
-    
+    /* Compact dropdown on small screens */
     .dropdown-content {
       min-width: 200px;
       padding: 15px;
+    }
+    /* Keep dropdowns inside viewport */
+    .music-dropdown {
+      right: 110px;
+    }
+    .menu-dropdown {
+      right: 10px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    /* Hide text labels to save space; use icons only */
+    .tab-label {
+      display: none;
+    }
+    .game-title {
+      display: none;
+    }
+    .header-right {
+      gap: 0.5rem;
     }
   }
 </style>
