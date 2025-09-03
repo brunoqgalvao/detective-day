@@ -1,0 +1,7 @@
+node_modules
+dist
+npm-debug.log
+.DS_Store
+old
+scripts
+westwood manor.mp3

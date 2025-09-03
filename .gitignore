@@ -1,3 +1,43 @@
-gpt-image-1-mcp-server/
+# Dependencies
 node_modules/
-node_modules/*
+*/node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+backend/.env
+backend/.env.neon
+
+# Build outputs
+dist/
+*/dist/
+build/
+*/build/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+docker-compose.override.yml
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# GPT Image MCP Server
+gpt-image-1-mcp-server/
+
+# Database
+*.sql.backup
+detective_day_postgres_data/
+
+# Service Account Keys (NEVER commit these!)
+*-key.json
+github-actions-key.json

@@ -1,0 +1,126 @@
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual trigger
+
+env:
+  PROJECT_ID: arnaldo-381317
+  REGION: us-central1
+  BACKEND_SERVICE: detective-day-backend
+  FRONTEND_SERVICE: detective-day-frontend
+  REPOSITORY: detective-day
+
+jobs:
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      # Backend Deployment
+      - name: Build and Push Backend
+        run: |
+          cd backend
+          gcloud builds submit \
+            --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:${{ github.sha }} \
+            --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:latest \
+            .
+
+      - name: Deploy Backend to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.BACKEND_SERVICE }} \
+            --image us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:latest \
+            --platform managed \
+            --region ${{ env.REGION }} \
+            --allow-unauthenticated \
+            --set-env-vars "DATABASE_URL=${{ secrets.DATABASE_URL }}" \
+            --set-env-vars "NODE_ENV=production" \
+            --set-env-vars "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" \
+            --set-env-vars "ANTHROPIC_MODEL=claude-3-5-haiku-20241022" \
+            --memory 512Mi \
+            --cpu 1 \
+            --min-instances 1 \
+            --max-instances 10
+
+      - name: Get Backend URL
+        id: backend-url
+        run: |
+          BACKEND_URL=$(gcloud run services describe ${{ env.BACKEND_SERVICE }} \
+            --region ${{ env.REGION }} \
+            --format="value(status.url)")
+          echo "url=$BACKEND_URL" >> $GITHUB_OUTPUT
+          echo "Backend deployed at: $BACKEND_URL"
+
+      # Update nginx config with backend URL
+      - name: Update Frontend Nginx Config
+        run: |
+          BACKEND_HOST=$(echo "${{ steps.backend-url.outputs.url }}" | sed 's|https://||')
+          sed -i "s|proxy_pass https://.*\.run\.app/api/|proxy_pass ${{ steps.backend-url.outputs.url }}/api/|" frontend/nginx/default.conf
+          sed -i "s|proxy_set_header Host .*\.run\.app|proxy_set_header Host $BACKEND_HOST|" frontend/nginx/default.conf
+          echo "Updated nginx config with backend URL: ${{ steps.backend-url.outputs.url }}"
+
+      # Frontend Deployment
+      - name: Build and Push Frontend
+        run: |
+          cd frontend
+          gcloud builds submit \
+            --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:${{ github.sha }} \
+            --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:latest \
+            .
+
+      - name: Deploy Frontend to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.FRONTEND_SERVICE }} \
+            --image us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:latest \
+            --platform managed \
+            --region ${{ env.REGION }} \
+            --allow-unauthenticated \
+            --memory 256Mi \
+            --cpu 1 \
+            --min-instances 1 \
+            --max-instances 10
+
+      - name: Get Frontend URL
+        id: frontend-url
+        run: |
+          FRONTEND_URL=$(gcloud run services describe ${{ env.FRONTEND_SERVICE }} \
+            --region ${{ env.REGION }} \
+            --format="value(status.url)")
+          echo "url=$FRONTEND_URL" >> $GITHUB_OUTPUT
+          echo "Frontend deployed at: $FRONTEND_URL"
+
+      # Update Backend CORS
+      - name: Update Backend CORS Settings
+        run: |
+          gcloud run services update ${{ env.BACKEND_SERVICE }} \
+            --update-env-vars "FRONTEND_URL=${{ steps.frontend-url.outputs.url }}" \
+            --region ${{ env.REGION }}
+
+      # Output deployment info
+      - name: Deployment Summary
+        run: |
+          echo "🎉 Deployment Complete!"
+          echo "Frontend: ${{ steps.frontend-url.outputs.url }}"
+          echo "Backend: ${{ steps.backend-url.outputs.url }}"
+          echo "Commit: ${{ github.sha }}"

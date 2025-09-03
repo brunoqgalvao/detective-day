@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  postgres:
+    # Do not publish DB port in prod
+    ports: []
+
+  backend:
+    # Do not publish backend port in prod (use Nginx proxy)
+    ports: []
+
+  frontend:
+    # Keep only HTTP port exposed
+    ports:
+      - "80:80"
+
