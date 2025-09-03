@@ -45,7 +45,14 @@ jobs:
           gcloud builds submit \
             --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:${{ github.sha }} \
             --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:latest \
-            .
+            --quiet \
+            . || true
+          # Check if build succeeded
+          BUILD_STATUS=$(gcloud builds list --limit 1 --format="value(status)" --project ${{ env.PROJECT_ID }})
+          if [ "$BUILD_STATUS" != "SUCCESS" ]; then
+            echo "Build failed with status: $BUILD_STATUS"
+            exit 1
+          fi
 
       - name: Deploy Backend to Cloud Run
         run: |
@@ -87,7 +94,14 @@ jobs:
           gcloud builds submit \
             --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:${{ github.sha }} \
             --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:latest \
-            .
+            --quiet \
+            . || true
+          # Check if build succeeded
+          BUILD_STATUS=$(gcloud builds list --limit 1 --format="value(status)" --project ${{ env.PROJECT_ID }})
+          if [ "$BUILD_STATUS" != "SUCCESS" ]; then
+            echo "Build failed with status: $BUILD_STATUS"
+            exit 1
+          fi
 
       - name: Deploy Frontend to Cloud Run
         run: |
