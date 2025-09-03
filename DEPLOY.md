@@ -1,6 +1,11 @@
+# Local/Docker Deployment Guide
+
 **Overview**
-- Purpose: One‑command Docker Compose deployment (frontend + backend + Postgres) on a single VM.
-- Result: Static frontend on Nginx, API proxied at `/api`, Postgres in same docker network.
+- Purpose: Local development and testing with Docker Compose
+- Components: Frontend (Nginx), Backend (Node.js), Postgres database
+- Use Case: Development, testing, or single-VM deployment
+
+**For production deployment to Google Cloud Run, see [CLOUD-RUN-DEPLOY.md](./CLOUD-RUN-DEPLOY.md)**
 
 **Prerequisites**
 - Docker and Docker Compose installed on the target machine.

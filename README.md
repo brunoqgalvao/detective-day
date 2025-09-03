@@ -27,17 +27,23 @@ The game is built with a secure client-server architecture:
 - Responsive design for desktop and tablet
 - Real-time state management with Svelte stores
 
+## 🎮 Live Demo
+
+**Play now**: https://detective-day-frontend-421768392012.us-central1.run.app
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 16+ installed
 - Anthropic API key ([Get one here](https://console.anthropic.com))
+- Docker (optional, for containerized deployment)
+- GitHub CLI and Google Cloud CLI (for production deployment)
 
 ### Installation
 
 1. **Clone the repository**
 ```bash
-git clone [repository-url]
+git clone https://github.com/brunoqgalvao/detective-day.git
 cd detective-day
 ```
 
@@ -139,6 +145,29 @@ detective-day/
 │
 └── start.sh            # Startup script for both servers
 ```
+
+## 🚢 Deployment
+
+### Automatic Deployment (GitHub Actions)
+
+This project includes automatic deployment to Google Cloud Run via GitHub Actions.
+
+**Every push to `main` branch automatically deploys to production!**
+
+For setup instructions, see [CLOUD-RUN-DEPLOY.md](./CLOUD-RUN-DEPLOY.md)
+
+### Local Deployment (Docker Compose)
+
+```bash
+# With local PostgreSQL database
+./scripts/deploy.sh
+
+# With Neon cloud database
+export DATABASE_URL="postgresql://..."
+./scripts/deploy-prod.sh
+```
+
+For details, see [DEPLOY.md](./DEPLOY.md)
 
 ## 🔧 Development
 

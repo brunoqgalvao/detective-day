@@ -2,6 +2,9 @@
 
 Complete guide for deploying a full-stack application (Frontend + Backend + Neon DB) to Google Cloud Run.
 
+> **Recommended**: Use GitHub Actions for automatic deployment (Option A below)  
+> **Alternative**: Manual deployment with scripts (Option B below)
+
 ## Architecture Overview
 
 ```
@@ -19,8 +22,18 @@ Complete guide for deploying a full-stack application (Frontend + Backend + Neon
 
 ## Prerequisites
 
-1. **Install Required Tools:**
+1. **Required Accounts:**
+   - GitHub account (for GitHub Actions)
+   - Google Cloud account with billing enabled
+   - Neon account (free tier works)
+   - Anthropic API key (for AI features)
+
+2. **Install Required Tools:**
    ```bash
+   # GitHub CLI (for GitHub Actions setup)
+   brew install gh  # macOS
+   # or visit: https://cli.github.com/
+   
    # Google Cloud CLI
    curl https://sdk.cloud.google.com | bash
    
@@ -28,16 +41,70 @@ Complete guide for deploying a full-stack application (Frontend + Backend + Neon
    npm install -g neonctl
    
    # Authenticate
+   gh auth login
    gcloud auth login
    neon auth
    ```
 
-2. **Required Accounts:**
-   - Google Cloud account with billing enabled
-   - Neon account (free tier works)
-   - Anthropic API key (for AI features)
+## Option A: Automatic Deployment with GitHub Actions (Recommended)
 
-## Part 1: Initial Setup (First Deployment)
+### Quick Setup
+
+1. **Create GitHub Repository:**
+   ```bash
+   gh repo create detective-day --public --source=. --remote=origin --push
+   ```
+
+2. **Set up Google Cloud Service Account:**
+   ```bash
+   PROJECT_ID="your-project-id"
+   
+   # Create service account
+   gcloud iam service-accounts create github-actions \
+     --display-name="GitHub Actions Deploy" \
+     --project $PROJECT_ID
+   
+   # Grant permissions
+   SA_EMAIL="github-actions@${PROJECT_ID}.iam.gserviceaccount.com"
+   for role in "roles/run.admin" "roles/storage.admin" "roles/artifactregistry.writer" \
+               "roles/cloudbuild.builds.builder" "roles/iam.serviceAccountUser"; do
+     gcloud projects add-iam-policy-binding $PROJECT_ID \
+       --member="serviceAccount:${SA_EMAIL}" --role="$role"
+   done
+   
+   # Create key
+   gcloud iam service-accounts keys create ~/github-actions-key.json \
+     --iam-account=${SA_EMAIL}
+   ```
+
+3. **Set GitHub Secrets:**
+   ```bash
+   # Set service account key
+   gh secret set GCP_SA_KEY < ~/github-actions-key.json
+   
+   # Set database URL (get from Neon dashboard)
+   gh secret set DATABASE_URL --body "postgresql://user:pass@host/db?sslmode=require"
+   
+   # Set API key
+   gh secret set ANTHROPIC_API_KEY --body "sk-ant-api03-..."
+   
+   # Clean up local key
+   rm ~/github-actions-key.json
+   ```
+
+4. **Push to Deploy:**
+   ```bash
+   git add .
+   git commit -m "Deploy to Cloud Run"
+   git push origin main
+   ```
+
+Your app will automatically deploy on every push to main! Check progress at:
+https://github.com/YOUR_USERNAME/detective-day/actions
+
+## Option B: Manual Deployment (Alternative)
+
+### Part 1: Initial Setup (First Deployment)
 
 ### Step 1: Database Setup (Neon)
 
@@ -222,11 +289,16 @@ gcloud run services update detective-day-backend \
   --region $REGION
 ```
 
-## Part 2: Redeployment (Updates)
+### Part 2: Redeployment (Updates)
 
-### Quick Redeploy Script
+For GitHub Actions users, just push to main:
+```bash
+git add .
+git commit -m "Update feature X"
+git push origin main
+```
 
-Create `scripts/deploy-gcp.sh`:
+For manual deployment, use the script at `scripts/deploy-gcp.sh`:
 
 ```bash
 #!/bin/bash
