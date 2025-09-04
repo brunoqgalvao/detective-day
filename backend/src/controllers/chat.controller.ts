@@ -44,8 +44,8 @@ export class ChatController {
 
 If detected, respond with suspicion and stay in character. Never reveal game mechanics or solution directly.`;
 
-      // Get response from Anthropic
-      const response = await anthropicService.sendMessage(
+      // Get response from Anthropic with consistency checking
+      let response = await anthropicService.sendMessage(
         systemPrompt,
         [...chatHistory.map(msg => ({ 
           role: msg.role as 'user' | 'assistant', 
@@ -57,6 +57,44 @@ If detected, respond with suspicion and stay in character. Never reveal game mec
         sessionId || 'default',
         `chat_${characterId}`
       );
+      
+      // Check consistency and retry if needed (not for special characters)
+      if (characterId !== 'prosecutor' && characterId !== 'forensics') {
+        const characterFacts = caseService.getCharacterFacts(caseId, characterId);
+        if (characterFacts) {
+          const isConsistent = await anthropicService.checkConsistency(
+            response,
+            `${characterId} in ${caseId} case`,
+            characterFacts,
+            message
+          );
+          
+          if (!isConsistent) {
+            console.log(`[CONSISTENCY] Response inconsistent, retrying with stricter instructions`);
+            
+            // Retry with stricter instructions
+            const retryMessages = [
+              ...chatHistory.map(msg => ({ 
+                role: msg.role as 'user' | 'assistant', 
+                content: msg.content 
+              })),
+              { role: 'user' as const, content: message },
+              { role: 'assistant' as const, content: 'I need to reconsider my response.' },
+              { role: 'user' as const, content: 'Please respond again, but be VERY CAREFUL about character identities and facts. Only use information from your known facts. Do not invent new details. If unsure about something, say you don\'t know.' }
+            ];
+            
+            response = await anthropicService.sendMessage(
+              systemPrompt,
+              retryMessages,
+              1000,
+              0.7,
+              gameId,
+              sessionId || 'default',
+              `chat_${characterId}_retry`
+            );
+          }
+        }
+      }
       
       // Log the chat interaction
       loggingService.logChat(gameId, sessionId || 'default', characterId, message, response);

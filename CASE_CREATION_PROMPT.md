@@ -356,6 +356,10 @@ export const facts: Record<string, string[]> = {
     "Include victim info, relationships, observations",
     "What they witnessed or discovered",
     "Their own secrets and activities",
+    "CRITICAL: Include complete employee/character roster if they would know it",
+    "CRITICAL: Explicitly state character names AND their roles (e.g., 'Alex Chen is our Lead Security Analyst')",
+    "CRITICAL: Include negative facts to prevent hallucination (e.g., 'There is NO person named X at our company')",
+    "CRITICAL: Clarify role distinctions (e.g., 'Alex is the Security Analyst, NOT the CTO')",
     "At least 8-10 facts per character"
   ],
   // Special roles:
@@ -363,13 +367,16 @@ export const facts: Record<string, string[]> = {
     "Scientific evidence about the crime",
     "Time of death, cause of death",
     "Physical evidence analysis",
+    "Complete list of all characters with their exact names and roles",
+    "Explicit statement that no other characters exist",
     "No speculation, only facts"
   ],
   prosecutor: [
     "Basic case facts",
-    "All character names and roles",
+    "All character names and roles (COMPLETE LIST)",
     "Requirements for prosecution",
-    "Prime suspect identification"
+    "Prime suspect identification",
+    "Explicit roster: 'The suspects are: [full list with roles]'"
   ]
 };
 ```
@@ -467,6 +474,38 @@ This will generate all images defined in the case structure.
 - **Misleading elements**: Deliberate false leads that seem plausible
 - **Hidden connections**: Reward thorough investigation
 
+## Hallucination Prevention Guidelines
+
+### CRITICAL: Preventing Character/Name Hallucinations
+
+1. **Explicit Character Rosters**: Every character who would know the company/group members MUST have a complete roster in their facts:
+   ```typescript
+   "Alex Chen is our Lead Security Analyst",
+   "Sarah Kim is a junior developer", 
+   "James Rivera was our CTO but left 6 months ago",
+   "We don't currently have a CTO"
+   ```
+
+2. **Negative Facts**: Include facts about who DOESN'T exist:
+   ```typescript
+   "There is NO Oliver Chen at our company",
+   "We don't have anyone named [common confusion]"
+   ```
+
+3. **Role Clarification**: Explicitly state what someone IS NOT:
+   ```typescript
+   "Alex Chen is the Security Analyst, NOT the CTO",
+   "Oliver Frost is an external consultant, NOT an employee"
+   ```
+
+4. **Name-Role Binding**: Always pair names with roles in facts to prevent mix-ups:
+   ```typescript
+   // BAD: "Alex knows the systems"
+   // GOOD: "Alex Chen, our Security Analyst, knows the systems"
+   ```
+
+5. **Consistency Across Characters**: All characters who would logically know the roster should have the SAME accurate roster in their facts.
+
 ## Critical Requirements
 
 ### 1. Timeline Consistency
@@ -480,6 +519,7 @@ This will generate all images defined in the case structure.
 - No omniscient knowledge
 - Witnesses only know what they saw
 - Secrets are hidden until revealed
+- Characters MUST use exact names and roles from their facts
 
 ### 3. Evidence Rules
 - Each piece must be discoverable through investigation
@@ -525,6 +565,10 @@ Before submitting, verify:
 - [ ] All required images are generated and referenced
 - [ ] Milestones cover key discoveries
 - [ ] Character knowledge boundaries are enforced
+- [ ] **Character rosters explicitly listed in facts for all who would know them**
+- [ ] **Negative facts included to prevent non-existent character hallucinations**
+- [ ] **All character names paired with roles to prevent confusion**
+- [ ] **Role clarifications included (X is Y, NOT Z)**
 - [ ] Confession trigger is clearly defined
 - [ ] Red herrings and false leads are included
 - [ ] Case is solvable but challenging
