@@ -59,9 +59,9 @@ async function generateCaseImage(config: CaseImageConfig) {
       n: 1
     });
 
-    const imageData = response.data[0];
+    const imageData = response.data?.[0];
     
-    if (!imageData.b64_json) {
+    if (!imageData || !imageData.b64_json) {
       throw new Error('No base64 image data received');
     }
 

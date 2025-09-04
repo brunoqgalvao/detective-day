@@ -198,9 +198,9 @@ async function generateImage(config: ImageConfig): Promise<void> {
       n: 1
     });
 
-    const imageData = response.data[0];
+    const imageData = response.data?.[0];
     
-    if (!imageData.b64_json) {
+    if (!imageData || !imageData.b64_json) {
       throw new Error('No base64 image data received');
     }
 

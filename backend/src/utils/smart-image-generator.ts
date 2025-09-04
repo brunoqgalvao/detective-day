@@ -99,7 +99,7 @@ class SmartImageGenerator {
   }
 
   private generateCaseThumbnailPrompt(caseData: CaseData): string {
-    const prompts = {
+    const prompts: Record<string, string> = {
       'cyber-heist': 'High-tech server room with glowing green matrix code, dark cyberpunk atmosphere, digital crime scene, neon highlights, cinematic digital art',
       'art-forgery': 'Elegant art gallery at night with dramatic lighting, paintings on walls, mysterious atmosphere, film noir style, sophisticated and dark, high detail digital art'
     };
@@ -114,7 +114,7 @@ class SmartImageGenerator {
     return `Portrait of ${character.name}, ${character.age} years old, ${character.role}, professional appearance matching their role, ${style}`;
   }
 
-  private getCrimeSceneRequirements(caseId: string, caseData: CaseData): Array<{id: string, filename: string, prompt: string}> {
+  private getCrimeSceneRequirements(caseId: string, _caseData: CaseData): Array<{id: string, filename: string, prompt: string}> {
     if (caseId === 'cyber-heist') {
       return [
         {
