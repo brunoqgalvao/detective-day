@@ -15,14 +15,24 @@
   $: characterData = $currentCharacterData;
   
   $: characterName = (() => {
-    if (currentCharacter === 'forensics') return 'Dr. Sarah Mitchell - Crime Scene Expert';
-    if (currentCharacter === 'prosecutor') return 'Patricia Hayes - District Attorney';
+    if (currentCharacter === 'forensics') {
+      const forensics = $currentCase?.specialCharacters?.forensics;
+      return forensics ? `${forensics.name} - ${forensics.role}` : 'Crime Scene Expert';
+    }
+    if (currentCharacter === 'prosecutor') {
+      const prosecutor = $currentCase?.specialCharacters?.prosecutor;
+      return prosecutor ? `${prosecutor.name} - ${prosecutor.role}` : 'District Attorney';
+    }
     return characterData ? `${characterData.name} - ${characterData.role}` : 'Select someone to interview';
   })();
   
   $: characterImage = (() => {
-    if (currentCharacter === 'forensics') return '/images/characters/forensics.png';
-    if (currentCharacter === 'prosecutor') return '/images/characters/prosecutor.png';
+    if (currentCharacter === 'forensics') {
+      return $currentCase?.specialCharacters?.forensics?.image || '/images/characters/forensics.png';
+    }
+    if (currentCharacter === 'prosecutor') {
+      return $currentCase?.specialCharacters?.prosecutor?.image || '/images/characters/prosecutor.png';
+    }
     return currentCharacter ? `/images/characters/${currentCharacter}.png` : '';
   })();
   

@@ -30,6 +30,18 @@
       "label": "Restoration Room"
     }
   ],
+  "specialCharacters": {
+    "forensics": {
+      "name": "Detective Chen",
+      "role": "Art Crime Specialist",
+      "image": "/images/characters/detective_chen.png"
+    },
+    "prosecutor": {
+      "name": "Victoria Blackwell",
+      "role": "District Attorney",
+      "image": "/images/characters/prosecutor.png"
+    }
+  },
   "characters": [
     {
       "id": "claudia_beaumont",

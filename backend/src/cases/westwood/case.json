@@ -30,6 +30,18 @@
       "label": "Desk Evidence"
     }
   ],
+  "specialCharacters": {
+    "forensics": {
+      "name": "Dr. Sarah Mitchell",
+      "role": "Crime Scene Expert",
+      "image": "/images/characters/forensics.png"
+    },
+    "prosecutor": {
+      "name": "Patricia Hayes",
+      "role": "District Attorney",
+      "image": "/images/characters/prosecutor.png"
+    }
+  },
   "characters": [
     {
       "id": "sophia",

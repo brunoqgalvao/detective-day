@@ -29,6 +29,18 @@
       "label": "VPN Logs"
     }
   ],
+  "specialCharacters": {
+    "forensics": {
+      "name": "Agent Riley Foster",
+      "role": "FBI Cyber Forensics",
+      "image": "/images/characters/forensics.png"
+    },
+    "prosecutor": {
+      "name": "Michael Torres",
+      "role": "Federal Prosecutor",
+      "image": "/images/characters/prosecutor.png"
+    }
+  },
   "characters": [
     {
       "id": "alex_chen",

@@ -50,7 +50,7 @@
       on:click={() => selectCharacter('forensics')}
     >
       <span class="icon">🔬</span>
-      Crime Scene Expert
+      {$currentCase?.specialCharacters?.forensics?.role || 'Crime Scene Expert'}
     </button>
     
     <button 
@@ -59,7 +59,7 @@
       on:click={() => selectCharacter('prosecutor')}
     >
       <span class="icon">⚖️</span>
-      District Attorney
+      {$currentCase?.specialCharacters?.prosecutor?.role || 'District Attorney'}
     </button>
   </div>
 </div>
