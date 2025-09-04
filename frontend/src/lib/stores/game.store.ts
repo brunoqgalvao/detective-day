@@ -1,6 +1,7 @@
 import { writable, derived } from 'svelte/store';
 import type { GameState, CaseData, ChatMessage, Milestone } from '../types/game.types';
 import { api } from '../services/api';
+import { statsStore } from './stats.store';
 
 // Generate a unique session ID for this game session
 export const SESSION_ID = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -158,12 +159,31 @@ function createGameStore() {
         const newState = { ...state, gameWon: true };
         saveToLocalStorage(newState);
         api.saveGameState(SESSION_ID, newState);
-        // Update game stats
+        
+        // Count questions asked (total chat messages from user)
+        const questionsAsked = Object.values(state.chatHistories).reduce((total, history) => {
+          return total + history.filter(msg => msg.role === 'user').length;
+        }, 0);
+        
+        // Count evidence discovered
+        const evidenceFound = state.evidenceDiscovered.length;
+        
+        // Update stats store with completion
+        statsStore.completeCase(state.caseId, questionsAsked, evidenceFound);
+        
+        // Update game stats and track completed cases (legacy support)
         if (typeof window !== 'undefined') {
           const gamesPlayed = parseInt(localStorage.getItem('games_played') || '0');
           const casesSolved = parseInt(localStorage.getItem('cases_solved') || '0');
           localStorage.setItem('games_played', String(gamesPlayed + 1));
           localStorage.setItem('cases_solved', String(casesSolved + 1));
+          
+          // Track which specific cases have been completed
+          const completedCases = JSON.parse(localStorage.getItem('completed_cases') || '[]');
+          if (!completedCases.includes(state.caseId)) {
+            completedCases.push(state.caseId);
+            localStorage.setItem('completed_cases', JSON.stringify(completedCases));
+          }
         }
         return newState;
       });

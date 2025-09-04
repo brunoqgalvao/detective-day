@@ -1,5 +1,6 @@
 <script lang="ts">
   import { gameStore, currentCharacterData, currentCase, uiStore, showNotification, SESSION_ID } from '../../stores/game.store';
+  import { scenarioStore } from '../../stores/scenario.store';
   import { api } from '../../services/api';
   import ChatMessage from './ChatMessage.svelte';
   import EvidenceBoard from './EvidenceBoard.svelte';
@@ -63,6 +64,13 @@
           content: response.response
         });
         
+        console.log('[FRONTEND] Response from backend:', {
+          character: currentCharacter,
+          isConfession: response.isConfession,
+          milestoneDiscovered: response.milestoneDiscovered,
+          responsePreview: response.response.substring(0, 100)
+        });
+        
         // Check for milestone discovery
         if (response.milestoneDiscovered) {
           gameStore.discoverMilestone(response.milestoneDiscovered);
@@ -76,10 +84,16 @@
         
         // Check for confession/win
         if (response.isConfession) {
+          console.log('[WIN TRIGGERED] isConfession is true, triggering win screen');
           setTimeout(() => {
             gameStore.winGame();
+            // Update both stores to ensure compatibility with both flows
             uiStore.update(s => ({ ...s, currentScreen: 'win' }));
+            // Also update scenarioStore for new flow
+            scenarioStore.navigateTo('results');
           }, 2000);
+        } else {
+          console.log('[WIN NOT TRIGGERED] isConfession is false');
         }
       }
     } catch (error) {

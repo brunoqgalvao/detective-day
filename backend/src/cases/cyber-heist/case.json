@@ -1,0 +1,143 @@
+{
+  "id": "cyber-heist",
+  "title": "Digital Shadows",
+  "initialBriefing": "<p><strong>Date:</strong> November 3rd, 2024 - 3:15 AM</p><p><strong>Location:</strong> SecureBank Headquarters, Financial District</p><p>You've been called to investigate a sophisticated cyber heist. <strong>$50 million</strong> has vanished from SecureBank's servers at exactly 2:47 AM. The theft was discovered by James Rivera, the former CTO, who was responding to a server alert.</p><p><strong>Crime Scene Details:</strong></p><ul><li>The hack originated from inside the network</li><li>Multiple security protocols were bypassed using legitimate credentials</li><li>The money was converted to cryptocurrency and dispersed</li><li>No alarms were triggered during the heist</li><li>A fake server alert was used as a distraction</li></ul><p><strong>Initial Information:</strong></p><p>All senior staff with system access are being questioned. The FBI cyber crimes unit has been notified. The attack required intimate knowledge of SecureBank's security infrastructure, suggesting an inside job or someone with insider information.</p><p>Your task is to interview the suspects, analyze digital evidence, and identify the perpetrator before they can cover their tracks completely.</p>",
+  "victim": {
+    "name": "SecureBank",
+    "type": "Institution",
+    "description": "Major financial institution specializing in cryptocurrency and digital assets.",
+    "lossAmount": "$50 million",
+    "crimeType": "Cyber Heist"
+  },
+  "characters": [
+    {
+      "id": "alex_chen",
+      "name": "Alex Chen",
+      "role": "Lead Security Analyst",
+      "age": 34,
+      "publicInfo": "Lead security analyst responsible for system integrity. Has worked at SecureBank for 5 years."
+    },
+    {
+      "id": "sarah_kim",
+      "name": "Sarah Kim",
+      "role": "Junior Developer",
+      "age": 27,
+      "publicInfo": "Rising star in the development team. Known for innovative solutions but under financial pressure."
+    },
+    {
+      "id": "david_morrison",
+      "name": "David Morrison",
+      "role": "CFO",
+      "age": 45,
+      "publicInfo": "Chief Financial Officer with full access to financial systems. Known gambler."
+    },
+    {
+      "id": "marcus_taylor",
+      "name": "Marcus Taylor",
+      "role": "CEO",
+      "age": 52,
+      "publicInfo": "CEO of SecureBank. Currently under SEC investigation for insider trading."
+    },
+    {
+      "id": "rachel_wong",
+      "name": "Rachel Wong",
+      "role": "Head of Compliance",
+      "age": 38,
+      "publicInfo": "Compliance officer who knows all the security protocols. Brother imprisoned for hacking."
+    },
+    {
+      "id": "james_rivera",
+      "name": "James Rivera",
+      "role": "Former CTO",
+      "age": 41,
+      "publicInfo": "Former CTO who 'resigned' six months ago. Still has contacts in the company."
+    },
+    {
+      "id": "nina_patel",
+      "name": "Nina Patel",
+      "role": "VP of Operations",
+      "age": 36,
+      "publicInfo": "Vice President of Operations with access to all operational systems. Has family in India."
+    },
+    {
+      "id": "oliver_frost",
+      "name": "Oliver Frost",
+      "role": "Security Consultant",
+      "age": 44,
+      "publicInfo": "External security consultant brought in to audit systems. Former government contractor."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "vpn_logs",
+      "name": "VPN Access Logs",
+      "description": "Network logs showing VPN connections from various IP addresses during the heist window. One connection originated from an unusual location.",
+      "discovered": false
+    },
+    {
+      "id": "server_logs",
+      "name": "Server Access Records",
+      "description": "Database access logs showing multiple queries executed between 2:30-2:47 AM. Admin credentials were used.",
+      "discovered": false
+    },
+    {
+      "id": "fake_alert",
+      "name": "Fake Alert Origin",
+      "description": "Code analysis reveals the alert that brought James Rivera to the office was triggered manually from inside the network.",
+      "discovered": false
+    },
+    {
+      "id": "crypto_wallets",
+      "name": "Cryptocurrency Wallet Addresses",
+      "description": "Blockchain analysis shows funds were distributed to 50+ wallets. Most remain untouched.",
+      "discovered": false
+    },
+    {
+      "id": "keylogger",
+      "name": "Keylogger Installation Records",
+      "description": "A keylogger was installed on David Morrison's workstation three weeks ago. Installation required physical access.",
+      "discovered": false
+    },
+    {
+      "id": "badge_records",
+      "name": "Security Badge Records",
+      "description": "Badge access logs show Sarah Kim entered the building at 11 PM, unusually late for a junior developer.",
+      "discovered": false
+    },
+    {
+      "id": "cctv_gaps",
+      "name": "CCTV Footage Gaps",
+      "description": "Security cameras on the 7th floor were offline for maintenance from 2-3 AM. This was scheduled two weeks prior.",
+      "discovered": false
+    },
+    {
+      "id": "workstation_logs",
+      "name": "Workstation Access Logs",
+      "description": "David Morrison's workstation was accessed remotely at 2:35 AM, despite him being at the casino.",
+      "discovered": false
+    },
+    {
+      "id": "alibis",
+      "name": "Suspect Alibis",
+      "description": "All suspects have provided their whereabouts during the heist. Most claim to have been asleep at home.",
+      "discovered": false
+    },
+    {
+      "id": "casino_confirmation",
+      "name": "Casino Security Footage",
+      "description": "The Golden Nugget Casino confirms David Morrison was at the blackjack table from midnight to 4 AM.",
+      "discovered": false
+    },
+    {
+      "id": "tokyo_calls",
+      "name": "Tokyo Conference Call Logs",
+      "description": "Marcus Taylor was on a video call with Tokyo investors from 2-3:30 AM. Call logs and recordings confirm his presence.",
+      "discovered": false
+    }
+  ],
+  "solution": {
+    "culprit": "sarah_kim",
+    "method": "Used keylogger to capture David's sold credentials, spoofed VPN, triggered fake alert",
+    "motive": "Desperate to pay student loans before department outsourced, lost everything in crypto"
+  }
+}

@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { gameStore, uiStore } from '../../stores/game.store';
+  import { statsStore } from '../../stores/stats.store';
+  import { scenarioStore } from '../../stores/scenario.store';
   
   // Determine if it was a confession or prosecution
   let isConfession = false;
@@ -8,9 +11,30 @@
   $: lastCharacter = $gameStore.currentCharacter;
   $: isConfession = lastCharacter === 'marcus';
   
+  // Track completion on mount
+  onMount(() => {
+    if ($gameStore.caseId && !$gameStore.gameWon) {
+      // Count questions asked (total chat messages)
+      let questionsAsked = 0;
+      Object.values($gameStore.chatHistories).forEach(history => {
+        questionsAsked += history.filter(msg => msg.role === 'user').length;
+      });
+      
+      // Mark case as completed
+      statsStore.completeCase(
+        $gameStore.caseId,
+        questionsAsked,
+        $gameStore.evidenceDiscovered.length
+      );
+      
+      // Mark game as won in game store
+      gameStore.winGame();
+    }
+  });
+  
   function playAgain() {
     gameStore.reset();
-    uiStore.update(s => ({ ...s, currentScreen: 'intro' }));
+    scenarioStore.navigateTo('selection');
   }
 </script>
 

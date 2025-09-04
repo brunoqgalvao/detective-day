@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { uiStore } from '../../stores/game.store';
+  import { uiStore, currentCase } from '../../stores/game.store';
   
   $: showModal = $uiStore.showCaseSummary;
   
@@ -13,11 +13,29 @@
       close();
     }
   }
+  
+  function getCaseNumber(caseId: string) {
+    const caseNumbers: Record<string, string> = {
+      'westwood': 'Case #2024-1015-WM',
+      'cyber-heist': 'Case #2024-1103-CH',
+      'art-forgery': 'Case #2024-1208-AF'
+    };
+    return caseNumbers[caseId] || 'Case #2024-XXXX';
+  }
+  
+  function getCaseType(caseId: string) {
+    const caseTypes: Record<string, string> = {
+      'westwood': 'HOMICIDE INVESTIGATION',
+      'cyber-heist': 'CYBER CRIME INVESTIGATION',
+      'art-forgery': 'HOMICIDE & FRAUD INVESTIGATION'
+    };
+    return caseTypes[caseId] || 'INVESTIGATION';
+  }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
 
-{#if showModal}
+{#if showModal && $currentCase}
   <div class="modal-overlay" on:click={close}>
     <div class="case-file-container" on:click|stopPropagation>
       <div class="case-file">
@@ -28,117 +46,125 @@
         
         <div class="file-content">
           <div class="case-title">
-            <h1>HOMICIDE INVESTIGATION</h1>
-            <div class="case-number">Case #2024-1015-WM</div>
-            <div class="date-stamp">Filed: October 15th, 2024 • 11:47 PM</div>
+            <h1>{getCaseType($currentCase.id)}</h1>
+            <div class="case-number">{getCaseNumber($currentCase.id)}</div>
+            <div class="case-name">{$currentCase.title}</div>
           </div>
           
-          <div class="section">
-            <h2>🎯 VICTIM INFORMATION</h2>
-            <div class="info-grid">
-              <div><strong>Name:</strong> Victor Westwood</div>
-              <div><strong>Age:</strong> 52 years old</div>
-              <div><strong>Occupation:</strong> Tech Entrepreneur & CEO</div>
-              <div><strong>Status:</strong> Owner of Westwood Manor Estate</div>
+          {#if $currentCase.victim}
+            <div class="section">
+              <h2>🎯 VICTIM INFORMATION</h2>
+              <div class="info-grid">
+                {#if $currentCase.victim.name}
+                  <div><strong>Name:</strong> {$currentCase.victim.name}</div>
+                {/if}
+                {#if $currentCase.victim.age}
+                  <div><strong>Age:</strong> {$currentCase.victim.age} years old</div>
+                {/if}
+                {#if $currentCase.victim.occupation}
+                  <div><strong>Occupation:</strong> {$currentCase.victim.occupation}</div>
+                {/if}
+                {#if $currentCase.victim.description}
+                  <div class="full-width"><strong>Background:</strong> {$currentCase.victim.description}</div>
+                {/if}
+                {#if $currentCase.victim.lossAmount}
+                  <div><strong>Loss:</strong> {$currentCase.victim.lossAmount}</div>
+                {/if}
+                {#if $currentCase.victim.type}
+                  <div><strong>Type:</strong> {$currentCase.victim.type}</div>
+                {/if}
+              </div>
             </div>
-          </div>
+          {/if}
           
           <div class="section">
-            <h2>🏠 CRIME SCENE DETAILS</h2>
-            <div class="location-info">
-              <p><strong>Location:</strong> Westwood Manor, Private Study</p>
-              <p><strong>Discovery Time:</strong> 10:30 PM by manor butler (Robert)</p>
-              <p><strong>Time of Death:</strong> Between 10:00-10:30 PM</p>
-            </div>
-            
-            <div class="scene-findings">
-              <h3>Physical Evidence:</h3>
-              <ul>
-                <li>💀 <strong>Cause of Death:</strong> Cyanide poisoning</li>
-                <li>🥃 <strong>Delivery Method:</strong> Poisoned whiskey glass (half-consumed)</li>
-                <li>🔒 <strong>Room Status:</strong> Study door locked from inside</li>
-                <li>🪟 <strong>Window:</strong> Slightly ajar despite cold weather</li>
-                <li>🗂️ <strong>No Struggle:</strong> No signs of forced entry or fight</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div class="section">
-            <h2>👥 PERSONS OF INTEREST</h2>
-            <div class="suspects-grid">
-              <div class="suspect-card">
-                <h4>Sophia Westwood</h4>
-                <p><em>Victim's Wife</em></p>
-                <p>Present at dinner party. Recently discovered husband's affair.</p>
-              </div>
-              
-              <div class="suspect-card">
-                <h4>Marcus Westwood</h4>
-                <p><em>Victim's Son</em></p>
-                <p>Chemistry background. Serious gambling debts threatening inheritance.</p>
-              </div>
-              
-              <div class="suspect-card">
-                <h4>Elena Rodriguez</h4>
-                <p><em>Personal Assistant</em></p>
-                <p>Last person to see victim alive. Had private meeting at 9:30 PM.</p>
-              </div>
-              
-              <div class="suspect-card">
-                <h4>James Patterson</h4>
-                <p><em>Business Partner</em></p>
-                <p>Financial irregularities recently discovered by victim.</p>
-              </div>
-              
-              <div class="suspect-card">
-                <h4>Isabella Westwood</h4>
-                <p><em>Victim's Daughter</em></p>
-                <p>Relationship conflicts with father. Alone during time of death.</p>
-              </div>
-              
-              <div class="suspect-card">
-                <h4>Margaret Chen</h4>
-                <p><em>Sister-in-law</em></p>
-                <p>Financial troubles. Recently denied loan request by victim.</p>
-              </div>
-              
-              <div class="suspect-card">
-                <h4>Robert Sterling</h4>
-                <p><em>Manor Butler</em></p>
-                <p>25 years of service. Discovered the body. Prepared victim's whiskey.</p>
-              </div>
+            <h2>📋 CASE BRIEFING</h2>
+            <div class="briefing-text">
+              {#if $currentCase.initialBriefing}
+                {@html $currentCase.initialBriefing}
+              {:else}
+                <p>Investigation details classified.</p>
+              {/if}
             </div>
           </div>
           
-          <div class="section">
-            <h2>📋 INVESTIGATION TIMELINE</h2>
-            <div class="timeline">
-              <div class="timeline-item">
-                <span class="time">8:00 PM</span>
-                <span class="event">Dinner party begins at Westwood Manor</span>
-              </div>
-              <div class="timeline-item">
-                <span class="time">9:30 PM</span>
-                <span class="event">Elena's private meeting with Victor begins</span>
-              </div>
-              <div class="timeline-item">
-                <span class="time">9:45 PM</span>
-                <span class="event">Elena leaves Victor's study</span>
-              </div>
-              <div class="timeline-item">
-                <span class="time">10:00-10:30 PM</span>
-                <span class="event critical">🚨 ESTIMATED TIME OF DEATH</span>
-              </div>
-              <div class="timeline-item">
-                <span class="time">10:30 PM</span>
-                <span class="event">Robert discovers Victor's body</span>
-              </div>
-              <div class="timeline-item">
-                <span class="time">11:47 PM</span>
-                <span class="event">Police arrive, investigation begins</span>
+          {#if $currentCase.victim?.timeOfDeath || $currentCase.victim?.causeOfDeath}
+            <div class="section">
+              <h2>🔬 FORENSIC FINDINGS</h2>
+              <div class="findings">
+                {#if $currentCase.victim.timeOfDeath}
+                  <p><strong>Time of Death:</strong> {$currentCase.victim.timeOfDeath}</p>
+                {/if}
+                {#if $currentCase.victim.causeOfDeath}
+                  <p><strong>Cause of Death:</strong> {$currentCase.victim.causeOfDeath}</p>
+                {/if}
               </div>
             </div>
-          </div>
+          {/if}
+          
+          {#if $currentCase.characters && $currentCase.characters.length > 0}
+            <div class="section">
+              <h2>👥 PERSONS OF INTEREST</h2>
+              <div class="suspects-grid">
+                {#each $currentCase.characters as character}
+                  <div class="suspect-card">
+                    <h4>{character.name}</h4>
+                    <p><em>{character.role}</em></p>
+                    {#if character.publicInfo}
+                      <p>{character.publicInfo}</p>
+                    {/if}
+                  </div>
+                {/each}
+              </div>
+            </div>
+          {/if}
+          
+          {#if $currentCase.evidence}
+            <div class="section">
+              <h2>🔍 EVIDENCE CATEGORIES</h2>
+              <div class="evidence-types">
+                {#if $currentCase.evidence.physical}
+                  <div class="evidence-category">
+                    <strong>Physical Evidence:</strong>
+                    <ul>
+                      {#each $currentCase.evidence.physical.slice(0, 3) as item}
+                        <li>{item}</li>
+                      {/each}
+                      {#if $currentCase.evidence.physical.length > 3}
+                        <li>...and {$currentCase.evidence.physical.length - 3} more items</li>
+                      {/if}
+                    </ul>
+                  </div>
+                {/if}
+                {#if $currentCase.evidence.digital}
+                  <div class="evidence-category">
+                    <strong>Digital Evidence:</strong>
+                    <ul>
+                      {#each $currentCase.evidence.digital.slice(0, 3) as item}
+                        <li>{item}</li>
+                      {/each}
+                      {#if $currentCase.evidence.digital.length > 3}
+                        <li>...and {$currentCase.evidence.digital.length - 3} more items</li>
+                      {/if}
+                    </ul>
+                  </div>
+                {/if}
+                {#if $currentCase.evidence.documentary}
+                  <div class="evidence-category">
+                    <strong>Documentary Evidence:</strong>
+                    <ul>
+                      {#each $currentCase.evidence.documentary.slice(0, 3) as item}
+                        <li>{item}</li>
+                      {/each}
+                      {#if $currentCase.evidence.documentary.length > 3}
+                        <li>...and {$currentCase.evidence.documentary.length - 3} more items</li>
+                      {/if}
+                    </ul>
+                  </div>
+                {/if}
+              </div>
+            </div>
+          {/if}
           
           <div class="section">
             <h2>🎯 INVESTIGATION OBJECTIVES</h2>
@@ -157,7 +183,7 @@
               </div>
               <div class="objective">
                 <span class="icon">⚖️</span>
-                <span>Present case to District Attorney when ready</span>
+                <span>Build a case strong enough for prosecution</span>
               </div>
             </div>
           </div>
@@ -166,7 +192,7 @@
         <div class="file-footer">
           <div class="signature-line">
             <p><strong>Lead Detective:</strong> ________________</p>
-            <p><strong>Badge #:</strong> Your Investigation</p>
+            <p><strong>Case Status:</strong> Active Investigation</p>
           </div>
         </div>
       </div>
@@ -199,15 +225,15 @@
   }
   
   .case-file {
-    background: #f8f6f0;
-    color: #2d2d2d;
+    background: #1a1a1a;
+    color: #e8e8e8;
     font-family: 'Times New Roman', serif;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
     position: relative;
   }
   
   .file-header {
-    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
     color: white;
     padding: 1rem 2rem;
     position: relative;
@@ -257,7 +283,7 @@
   }
   
   .case-title h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #cc0000;
     margin: 0 0 0.5rem 0;
     letter-spacing: 2px;
@@ -265,29 +291,30 @@
   
   .case-number {
     font-size: 1.1rem;
-    color: #666;
+    color: #aaa;
     font-weight: bold;
   }
   
-  .date-stamp {
-    font-size: 0.9rem;
-    color: #888;
+  .case-name {
+    font-size: 1.5rem;
+    color: #e8e8e8;
     margin-top: 0.5rem;
+    font-weight: bold;
   }
   
   .section {
     margin-bottom: 2rem;
-    background: white;
+    background: #252525;
     padding: 1.5rem;
     border-left: 4px solid #cc0000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
   
   .section h2 {
     color: #cc0000;
     margin: 0 0 1rem 0;
     font-size: 1.3rem;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #444;
     padding-bottom: 0.5rem;
   }
   
@@ -297,52 +324,60 @@
     gap: 0.8rem;
   }
   
-  .info-grid div {
-    padding: 0.5rem 0;
-    border-bottom: 1px dotted #ccc;
+  .info-grid .full-width {
+    grid-column: 1 / -1;
   }
   
-  .location-info p {
-    margin: 0.5rem 0;
+  .info-grid div {
+    padding: 0.5rem 0;
+    border-bottom: 1px dotted #444;
+  }
+  
+  .briefing-text {
     line-height: 1.6;
   }
   
-  .scene-findings h3 {
-    color: #444;
-    margin: 1rem 0 0.5rem 0;
-    font-size: 1.1rem;
+  .briefing-text :global(p) {
+    margin: 0.5rem 0;
   }
   
-  .scene-findings ul {
-    list-style: none;
-    padding-left: 0;
+  .briefing-text :global(ul) {
+    margin: 1rem 0;
+    padding-left: 2rem;
   }
   
-  .scene-findings li {
+  .briefing-text :global(li) {
+    margin: 0.5rem 0;
+  }
+  
+  .briefing-text :global(strong) {
+    color: #cc0000;
+  }
+  
+  .findings p {
     margin: 0.5rem 0;
     padding: 0.5rem;
-    background: #f9f9f9;
+    background: #2a2a2a;
     border-radius: 4px;
-    line-height: 1.5;
   }
   
   .suspects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
   }
   
   .suspect-card {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
+    background: #2a2a2a;
+    border: 1px solid #444;
     border-radius: 6px;
     padding: 1rem;
     transition: all 0.2s ease;
   }
   
   .suspect-card:hover {
-    background: #f0f0f0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
   
   .suspect-card h4 {
@@ -352,7 +387,7 @@
   }
   
   .suspect-card em {
-    color: #666;
+    color: #aaa;
     font-size: 0.9rem;
   }
   
@@ -362,48 +397,25 @@
     font-size: 0.9rem;
   }
   
-  .timeline {
-    border-left: 3px solid #cc0000;
-    padding-left: 1rem;
-    margin-left: 1rem;
+  .evidence-types {
+    display: grid;
+    gap: 1rem;
   }
   
-  .timeline-item {
-    display: flex;
-    margin: 1rem 0;
-    position: relative;
+  .evidence-category {
+    background: #2a2a2a;
+    padding: 1rem;
+    border-radius: 4px;
   }
   
-  .timeline-item::before {
-    content: '•';
-    position: absolute;
-    left: -1.3rem;
-    color: #cc0000;
-    font-size: 1.5rem;
-    background: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .evidence-category ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.5rem;
   }
   
-  .time {
-    font-weight: bold;
-    color: #cc0000;
-    min-width: 100px;
-    margin-right: 1rem;
-  }
-  
-  .event {
-    flex: 1;
-    line-height: 1.5;
-  }
-  
-  .event.critical {
-    color: #cc0000;
-    font-weight: bold;
+  .evidence-category li {
+    margin: 0.3rem 0;
+    color: #bbb;
   }
   
   .objectives {
@@ -417,7 +429,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: #f9f9f9;
+    background: #2a2a2a;
     border-radius: 6px;
     border-left: 4px solid #cc0000;
   }
@@ -428,7 +440,7 @@
   }
   
   .file-footer {
-    background: #f0f0f0;
+    background: #0f0f0f;
     padding: 2rem;
     border-top: 2px solid #cc0000;
   }
@@ -464,11 +476,11 @@
     }
     
     .file-content {
-      padding: 1.5rem;
+      padding: 1rem;
     }
     
     .case-title h1 {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
     
     .suspects-grid {

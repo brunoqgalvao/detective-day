@@ -4,11 +4,13 @@
   "description": "An interactive detective game powered by Claude",
   "main": "index.html",
   "scripts": {
-    "dev": "npx http-server -c-1"
+    "dev": "npx http-server -c-1",
+    "generate": "node generate-image.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",
-    "openai": "^5.16.0"
+    "dotenv": "^17.2.2",
+    "openai": "^5.19.1"
   },
   "devDependencies": {
     "http-server": "^14.1.1"

@@ -1,0 +1,137 @@
+{
+  "id": "art-forgery",
+  "title": "The Painted Lie",
+  "initialBriefing": "<p><strong>Date:</strong> December 8th, 2024 - 9:45 PM</p><p><strong>Location:</strong> Monet Gallery, Arts District</p><p>You've been called to investigate the murder of <strong>Vincent Monet</strong>, 58, renowned art dealer and gallery owner. He was found dead at 9:15 PM next to 'The Azure Dream', a painting worth $5 million.</p><p><strong>Crime Scene Details:</strong></p><ul><li>Victim found in the main gallery near the featured painting</li><li>Wine glass with residue found near the body</li><li>Gallery alarm was disabled</li><li>No signs of struggle</li><li>Back door was unlocked</li><li>Strong smell of paint thinner in the air</li></ul><p><strong>Initial Information:</strong></p><p>Vincent had a meeting scheduled with Detective Chen about potential art forgeries. Multiple people had access to the gallery. Recent rumors suggest several paintings in the gallery might be forgeries, which could destroy reputations and fortunes.</p><p>Your task is to interview suspects from the art world, examine the evidence, and uncover the truth behind both the murder and the forgeries.</p>",
+  "victim": {
+    "name": "Vincent Monet",
+    "age": 58,
+    "occupation": "Gallery Owner & Art Dealer",
+    "description": "Renowned but controversial art dealer. Known for high-profile sales and rumored involvement in forgeries.",
+    "timeOfDeath": "Approximately 8:45-9:00 PM",
+    "causeOfDeath": "Poisoning - toxic paint thinner in wine"
+  },
+  "characters": [
+    {
+      "id": "claudia_beaumont",
+      "name": "Claudia Beaumont",
+      "role": "Chief Art Authenticator",
+      "age": 42,
+      "publicInfo": "Chief authenticator who verified all paintings in Vincent's gallery. Reputation is everything in her field."
+    },
+    {
+      "id": "lorenzo_romano",
+      "name": "Lorenzo Romano",
+      "role": "Artist",
+      "age": 51,
+      "publicInfo": "Struggling artist whose originals never sold well. Known for creating 'replicas' for educational purposes."
+    },
+    {
+      "id": "sebastian_cross",
+      "name": "Sebastian Cross",
+      "role": "Rival Gallery Owner",
+      "age": 46,
+      "publicInfo": "Owner of Cross Contemporary Gallery. Lost many clients to Vincent over the years."
+    },
+    {
+      "id": "isabelle_laurent",
+      "name": "Isabelle Laurent",
+      "role": "Young Artist & Lover",
+      "age": 29,
+      "publicInfo": "Rising artist who was having an affair with Vincent. Recently had her first gallery showing."
+    },
+    {
+      "id": "detective_chen",
+      "name": "Detective Michael Chen",
+      "role": "Art Crime Investigator",
+      "age": 40,
+      "publicInfo": "Investigator specializing in art crimes. Was meeting Vincent about forgery allegations."
+    },
+    {
+      "id": "helena_westbrook",
+      "name": "Helena Westbrook",
+      "role": "Wealthy Collector",
+      "age": 55,
+      "publicInfo": "Prominent collector and charity organizer. Bought numerous pieces from Vincent."
+    },
+    {
+      "id": "mikhail_volkov",
+      "name": "Mikhail Volkov",
+      "role": "Russian Oligarch",
+      "age": 48,
+      "publicInfo": "Wealthy Russian collector who invested heavily in Vincent's gallery. Not someone to cross."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "poisoned_wine",
+      "name": "Wine Glass with Residue",
+      "description": "Half-empty wine glass found near the body. Lab tests confirm presence of toxic paint thinner mixed with red wine.",
+      "discovered": false
+    },
+    {
+      "id": "paint_thinner",
+      "name": "Paint Thinner Bottle",
+      "description": "Industrial-strength paint thinner found in the restoration room. Has fingerprints from multiple people including Lorenzo and Claudia.",
+      "discovered": false
+    },
+    {
+      "id": "gallery_keys",
+      "name": "Gallery Access Keys",
+      "description": "Multiple sets of gallery keys were distributed. Vincent, Claudia, Lorenzo, and Isabelle all had copies.",
+      "discovered": false
+    },
+    {
+      "id": "security_footage",
+      "name": "Security Camera Recordings",
+      "description": "Shows Claudia arriving at 8:30 PM, Lorenzo at 7:45 PM, and Isabelle leaving at 8:00 PM. Camera was disabled at 8:40 PM.",
+      "discovered": false
+    },
+    {
+      "id": "auth_certificates",
+      "name": "Authentication Certificates",
+      "description": "Claudia's authentication certificates for multiple paintings. Detective Chen was investigating irregularities in these documents.",
+      "discovered": false
+    },
+    {
+      "id": "financial_records",
+      "name": "Gallery Financial Records",
+      "description": "Shows gallery losing $2 million this year. Vincent was desperate to sell 'The Azure Dream' to stay afloat.",
+      "discovered": false
+    },
+    {
+      "id": "threat_messages",
+      "name": "Threatening Messages",
+      "description": "Email from Mikhail Volkov: 'You sold me fakes. This will not end well for you.' Sent three days ago.",
+      "discovered": false
+    },
+    {
+      "id": "forgery_evidence",
+      "name": "Forgery Analysis Report",
+      "description": "Detective Chen's preliminary report showing at least 5 paintings in the gallery are sophisticated forgeries authenticated by Claudia.",
+      "discovered": false
+    },
+    {
+      "id": "wine_alibi",
+      "name": "Wine Tasting Event Records",
+      "description": "Helena Westbrook was hosting a charity wine tasting from 7-10 PM. Guest list and photos confirm attendance.",
+      "discovered": false
+    },
+    {
+      "id": "restaurant_receipts",
+      "name": "Restaurant Receipts",
+      "description": "Sebastian Cross has receipts from Le Bernardin showing dinner from 7:30-9:30 PM with three clients.",
+      "discovered": false
+    },
+    {
+      "id": "yacht_statements",
+      "name": "Yacht Crew Statements",
+      "description": "Mikhail Volkov's yacht crew confirms he was aboard his yacht in the marina all evening, hosting a private party.",
+      "discovered": false
+    }
+  ],
+  "solution": {
+    "culprit": "claudia_beaumont",
+    "method": "Poisoned wine with toxic paint thinner at 8:45 PM",
+    "motive": "Vincent was going to expose her as corrupt authenticator to save himself"
+  }
+}

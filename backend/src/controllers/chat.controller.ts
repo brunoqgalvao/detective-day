@@ -62,8 +62,17 @@ If detected, respond with suspicion and stay in character. Never reveal game mec
       loggingService.logChat(gameId, sessionId || 'default', characterId, message, response);
 
       // Check for confession (only for Marcus)
-      const isConfession = characterId === 'marcus' && 
-        response.toLowerCase().includes('confess');
+      const responseWords = response.toLowerCase();
+      const hasConfessWord = responseWords.includes('confess');
+      const isMarcus = characterId === 'marcus';
+      const isConfession = isMarcus && hasConfessWord;
+      
+      console.log(`[CONFESSION CHECK] `);
+      console.log(`  - Character ID: '${characterId}'`);
+      console.log(`  - Is Marcus?: ${isMarcus}`);
+      console.log(`  - Response contains 'confess'?: ${hasConfessWord}`);
+      console.log(`  - Final isConfession value: ${isConfession}`);
+      console.log(`  - Response preview: ${response.substring(0, 100)}...`);
 
       // Check for prosecutor win condition
       let hasWon = false;
@@ -98,10 +107,16 @@ If detected, respond with suspicion and stay in character. Never reveal game mec
         console.log(`[MILESTONE] DISCOVERED: ${milestonesArray[discoveredIndex].title}`);
       }
 
+      const finalConfession = isConfession || hasWon;
+      console.log(`[RESPONSE] Sending to frontend:`);
+      console.log(`  - isConfession: ${finalConfession}`);
+      console.log(`  - hasWon: ${hasWon}`);
+      console.log(`  - milestoneDiscovered: ${discoveredMilestone}`);
+      
       res.json({
         response,
         milestoneDiscovered: discoveredMilestone,
-        isConfession: isConfession || hasWon
+        isConfession: finalConfession
       });
 
     } catch (error) {

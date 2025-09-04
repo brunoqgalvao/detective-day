@@ -8,7 +8,10 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "logs": "node src/utils/view-logs.js"
+    "logs": "node src/utils/view-logs.js",
+    "generate-images": "ts-node src/utils/generate-case-images.ts",
+    "generate-all-images": "ts-node src/utils/generate-all-case-images.ts",
+    "smart-generate": "ts-node src/utils/smart-image-generator.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "openai": "^5.19.1",
     "pg": "^8.16.3",
     "uuid": "^11.1.0"
   },
