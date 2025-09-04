@@ -10,6 +10,26 @@
     "timeOfDeath": "Approximately 8:45-9:00 PM",
     "causeOfDeath": "Poisoning - toxic paint thinner in wine"
   },
+  "crimeSceneImages": [
+    {
+      "src": "/images/crime-scene/gallery_crime_scene.png",
+      "alt": "Gallery Overview",
+      "caption": "Monet Gallery Crime Scene",
+      "label": "Gallery Overview"
+    },
+    {
+      "src": "/images/crime-scene/azure_dream_painting.png",
+      "alt": "Azure Dream Painting",
+      "caption": "The Azure Dream - $5 Million Painting",
+      "label": "Azure Dream Painting"
+    },
+    {
+      "src": "/images/crime-scene/restoration_room.png",
+      "alt": "Restoration Room",
+      "caption": "Gallery Restoration Room",
+      "label": "Restoration Room"
+    }
+  ],
   "characters": [
     {
       "id": "claudia_beaumont",

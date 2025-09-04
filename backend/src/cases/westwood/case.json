@@ -10,6 +10,26 @@
     "timeOfDeath": "Approximately 10:00-10:30 PM",
     "causeOfDeath": "Poisoning - likely cyanide based on preliminary examination"
   },
+  "crimeSceneImages": [
+    {
+      "src": "/images/crime-scene/crime_scene_overview.png",
+      "alt": "Crime Scene Overview",
+      "caption": "Victor's Study",
+      "label": "Study Overview"
+    },
+    {
+      "src": "/images/crime-scene/whiskey_glass_evidence.png",
+      "alt": "Poisoned Whiskey",
+      "caption": "Evidence - Poisoned Whiskey Glass",
+      "label": "Poisoned Whiskey"
+    },
+    {
+      "src": "/images/crime-scene/study_desk_detail.png",
+      "alt": "Desk Detail",
+      "caption": "Victor's Desk Detail",
+      "label": "Desk Evidence"
+    }
+  ],
   "characters": [
     {
       "id": "sophia",

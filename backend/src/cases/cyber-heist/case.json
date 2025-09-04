@@ -9,6 +9,26 @@
     "lossAmount": "$50 million",
     "crimeType": "Cyber Heist"
   },
+  "crimeSceneImages": [
+    {
+      "src": "/images/crime-scene/cyber_crime_scene.png",
+      "alt": "Server Room",
+      "caption": "SecureBank Server Room",
+      "label": "Server Room"
+    },
+    {
+      "src": "/images/crime-scene/server_room_detail.png",
+      "alt": "Server Details",
+      "caption": "Server Access Terminal",
+      "label": "Server Details"
+    },
+    {
+      "src": "/images/crime-scene/vpn_logs_evidence.png",
+      "alt": "VPN Logs",
+      "caption": "Network Access Logs",
+      "label": "VPN Logs"
+    }
+  ],
   "characters": [
     {
       "id": "alex_chen",

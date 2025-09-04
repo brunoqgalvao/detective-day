@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { gameStore, discoveredEvidence, uiStore } from '../../stores/game.store';
+  import { gameStore, discoveredEvidence, uiStore, currentCase } from '../../stores/game.store';
   import { milestones } from '../../data/milestones';
   
   $: discoveredMilestones = $gameStore.milestonesDiscovered.map(id => ({ id, ...milestones[id] }));
   $: allEvidence = [...$discoveredEvidence, ...discoveredMilestones];
+  $: crimeSceneImages = $currentCase?.crimeSceneImages || [];
   
   function showImageViewer(imageSrc: string, caption: string) {
     uiStore.update(s => ({
@@ -103,40 +104,24 @@
     {/if}
     
     <!-- Crime Scene Photos Section -->
-    <div class="crime-scene-section">
-      <h3>📸 Crime Scene Evidence</h3>
-      <div class="crime-scene-photos">
-        <div class="photo-card">
-          <img 
-            src="/images/crime-scene/crime_scene_overview.png" 
-            alt="Crime Scene Overview"
-            on:click={() => showImageViewer('/images/crime-scene/crime_scene_overview.png', 'Crime Scene - Victor\'s Study')}
-            on:error={(e) => e.currentTarget.style.display='none'}
-          />
-          <div class="photo-label">Study Overview</div>
-        </div>
-        
-        <div class="photo-card">
-          <img 
-            src="/images/crime-scene/whiskey_glass_evidence.png" 
-            alt="Poisoned Whiskey"
-            on:click={() => showImageViewer('/images/crime-scene/whiskey_glass_evidence.png', 'Evidence - Poisoned Whiskey Glass')}
-            on:error={(e) => e.currentTarget.style.display='none'}
-          />
-          <div class="photo-label">Poisoned Whiskey</div>
-        </div>
-        
-        <div class="photo-card">
-          <img 
-            src="/images/crime-scene/study_desk_detail.png" 
-            alt="Desk Detail"
-            on:click={() => showImageViewer('/images/crime-scene/study_desk_detail.png', 'Victor\'s Desk Detail')}
-            on:error={(e) => e.currentTarget.style.display='none'}
-          />
-          <div class="photo-label">Desk Evidence</div>
+    {#if crimeSceneImages.length > 0}
+      <div class="crime-scene-section">
+        <h3>📸 Crime Scene Evidence</h3>
+        <div class="crime-scene-photos">
+          {#each crimeSceneImages as image}
+            <div class="photo-card">
+              <img 
+                src={image.src}
+                alt={image.alt}
+                on:click={() => showImageViewer(image.src, image.caption)}
+                on:error={(e) => e.currentTarget.style.display='none'}
+              />
+              <div class="photo-label">{image.label}</div>
+            </div>
+          {/each}
         </div>
       </div>
-    </div>
+    {/if}
   </div>
 </div>
 
