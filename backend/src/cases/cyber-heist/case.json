@@ -135,9 +135,32 @@
       "discovered": false
     }
   ],
-  "solution": {
-    "culprit": "sarah_kim",
-    "method": "Used keylogger to capture David's sold credentials, spoofed VPN, triggered fake alert",
-    "motive": "Desperate to pay student loans before department outsourced, lost everything in crypto"
+  "images": {
+    "crimeScene": "/images/cases/cyber-heist/crime-scene.png",
+    "victim": "/images/cases/cyber-heist/victim.png",
+    "location": "/images/cases/cyber-heist/location.png",
+    "evidence": {
+      "vpn_logs": "/images/cases/cyber-heist/evidence-vpn_logs.png",
+      "server_logs": "/images/cases/cyber-heist/evidence-server_logs.png",
+      "fake_alert": "/images/cases/cyber-heist/evidence-fake_alert.png",
+      "crypto_wallets": "/images/cases/cyber-heist/evidence-crypto_wallets.png",
+      "keylogger": "/images/cases/cyber-heist/evidence-keylogger.png",
+      "badge_records": "/images/cases/cyber-heist/evidence-badge_records.png",
+      "cctv_gaps": "/images/cases/cyber-heist/evidence-cctv_gaps.png",
+      "workstation_logs": "/images/cases/cyber-heist/evidence-workstation_logs.png",
+      "alibis": "/images/cases/cyber-heist/evidence-alibis.png",
+      "casino_confirmation": "/images/cases/cyber-heist/evidence-casino_confirmation.png",
+      "tokyo_calls": "/images/cases/cyber-heist/evidence-tokyo_calls.png"
+    },
+    "characters": {
+      "alex_chen": "/images/cases/cyber-heist/character-alex_chen.png",
+      "sarah_kim": "/images/cases/cyber-heist/character-sarah_kim.png",
+      "david_morrison": "/images/cases/cyber-heist/character-david_morrison.png",
+      "marcus_taylor": "/images/cases/cyber-heist/character-marcus_taylor.png",
+      "rachel_wong": "/images/cases/cyber-heist/character-rachel_wong.png",
+      "james_rivera": "/images/cases/cyber-heist/character-james_rivera.png",
+      "nina_patel": "/images/cases/cyber-heist/character-nina_patel.png",
+      "oliver_frost": "/images/cases/cyber-heist/character-oliver_frost.png"
+    }
   }
 }

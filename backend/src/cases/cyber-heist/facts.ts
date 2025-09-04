@@ -1,7 +1,34 @@
 export const facts: Record<string, string[]> = {
+  forensics: [
+    "$50 million vanished from SecureBank servers at 2:47 AM",
+    "The hack originated from inside the network",
+    "Multiple security protocols were bypassed using legitimate credentials", 
+    "The money was converted to cryptocurrency and dispersed to 50+ wallets",
+    "A fake server alert was triggered at 2:15 AM to distract staff",
+    "VPN logs show connections from various IP addresses during the heist window",
+    "Admin credentials were used to execute database queries between 2:30-2:47 AM",
+    "Security cameras on the 7th floor were offline for maintenance from 2-3 AM",
+    "A keylogger was installed on David Morrison's workstation three weeks ago",
+    "Employees with system access: Alex Chen (Security Analyst), Sarah Kim (Junior Developer), David Morrison (CFO), Marcus Taylor (CEO), Rachel Wong (Compliance), James Rivera (Former CTO), Nina Patel (VP Operations), Oliver Frost (External Consultant)",
+    "There is no employee named Oliver Chen at SecureBank"
+  ],
+  
+  prosecutor: [
+    "SecureBank lost $50 million in a cyber heist at 2:47 AM",
+    "All senior staff with system access are suspects",
+    "The FBI cyber crimes unit is investigating",
+    "Evidence needed: proof of access, motive, and method",
+    "Current suspects: Alex Chen, Sarah Kim, David Morrison, Marcus Taylor, Rachel Wong, James Rivera, Nina Patel, Oliver Frost",
+    "Prime suspect must have had means, motive, and opportunity",
+    "Prosecution requires clear evidence linking suspect to the crime"
+  ],
+  
   alex_chen: [
     "$50 million vanished from SecureBank servers at 2:47 AM",
     "I was in the server room running diagnostics",
+    "I'm the Lead Security Analyst, not the CTO",
+    "James Rivera was our CTO but left 6 months ago",
+    "Oliver Frost is an external consultant, not an employee",
     "Multiple backdoors exist in our system",
     "Sarah has been acting suspicious lately",
     "David has a serious gambling problem",
@@ -15,6 +42,9 @@ export const facts: Record<string, string[]> = {
   sarah_kim: [
     "The heist happened at 2:47 AM",
     "I was working from home on patch deployment",
+    "I'm a junior developer on Alex Chen's team",
+    "James Rivera used to be our CTO before he left",
+    "Oliver Frost is the security consultant auditing us",
     "My VPN logs prove I was connected from home",
     "Our department is being outsourced next quarter",
     "I have $200k in student loans",
@@ -42,6 +72,15 @@ export const facts: Record<string, string[]> = {
     "The SEC is investigating me for insider trading",
     "My divorce will cost me $30 million",
     "I have override codes for all systems",
+    "Alex Chen is our Lead Security Analyst",
+    "Oliver Frost is an external security consultant",
+    "James Rivera was our CTO but resigned 6 months ago",
+    "Sarah Kim is a junior developer",
+    "David Morrison is our CFO",
+    "Rachel Wong is our Head of Compliance",
+    "Nina Patel is our VP of Operations",
+    "There is NO Oliver Chen - that person doesn't exist",
+    "We don't currently have a CTO since James left",
     "David has been embezzling funds",
     "Rachel's brother is in prison for hacking",
     "Someone knew exactly when to strike",

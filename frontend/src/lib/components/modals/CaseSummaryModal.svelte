@@ -237,13 +237,13 @@
     color: white;
     padding: 1rem 2rem;
     position: relative;
-    border-bottom: 3px solid #cc0000;
+    border-bottom: 3px solid #ffd700;
   }
   
   .classification-stamp {
     font-weight: bold;
     font-size: 1.2rem;
-    color: #cc0000;
+    color: #ffd700;
     letter-spacing: 3px;
     text-align: center;
   }
@@ -278,13 +278,13 @@
   .case-title {
     text-align: center;
     margin-bottom: 2rem;
-    border-bottom: 2px solid #cc0000;
+    border-bottom: 2px solid #ffd700;
     padding-bottom: 1rem;
   }
   
   .case-title h1 {
     font-size: 2rem;
-    color: #cc0000;
+    color: #ffd700;
     margin: 0 0 0.5rem 0;
     letter-spacing: 2px;
   }
@@ -306,12 +306,12 @@
     margin-bottom: 2rem;
     background: #252525;
     padding: 1.5rem;
-    border-left: 4px solid #cc0000;
+    border-left: 4px solid #ffd700;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
   
   .section h2 {
-    color: #cc0000;
+    color: #ffd700;
     margin: 0 0 1rem 0;
     font-size: 1.3rem;
     border-bottom: 1px solid #444;
@@ -351,7 +351,7 @@
   }
   
   .briefing-text :global(strong) {
-    color: #cc0000;
+    color: #ffd700;
   }
   
   .findings p {
@@ -381,7 +381,7 @@
   }
   
   .suspect-card h4 {
-    color: #cc0000;
+    color: #ffd700;
     margin: 0 0 0.3rem 0;
     font-size: 1.1rem;
   }
@@ -431,7 +431,7 @@
     padding: 1rem;
     background: #2a2a2a;
     border-radius: 6px;
-    border-left: 4px solid #cc0000;
+    border-left: 4px solid #ffd700;
   }
   
   .objective .icon {
@@ -442,7 +442,7 @@
   .file-footer {
     background: #0f0f0f;
     padding: 2rem;
-    border-top: 2px solid #cc0000;
+    border-top: 2px solid #ffd700;
   }
   
   .signature-line {
@@ -462,12 +462,12 @@
   }
   
   .case-file-container::-webkit-scrollbar-thumb {
-    background: #cc0000;
+    background: #ffd700;
     border-radius: 4px;
   }
   
   .case-file-container::-webkit-scrollbar-thumb:hover {
-    background: #aa0000;
+    background: #e6c200;
   }
   
   @media (max-width: 768px) {
