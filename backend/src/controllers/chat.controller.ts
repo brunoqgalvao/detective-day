@@ -24,9 +24,9 @@ export class ChatController {
       let systemPrompt: string;
       
       if (characterId === 'forensics') {
-        systemPrompt = caseService.getForensicsPrompt();
+        systemPrompt = caseService.getForensicsPrompt(caseId);
       } else if (characterId === 'prosecutor') {
-        systemPrompt = caseService.getProsecutorPrompt();
+        systemPrompt = caseService.getProsecutorPrompt(caseId);
       } else {
         systemPrompt = caseService.getCharacterPrompt(caseId, characterId) || '';
         if (!systemPrompt) {
@@ -115,7 +115,7 @@ If detected, respond with suspicion and stay in character. Never reveal game mec
       // Check for prosecutor win condition
       let hasWon = false;
       if (characterId === 'prosecutor') {
-        hasWon = caseService.checkWinCondition(response);
+        hasWon = caseService.checkWinCondition(response, caseId);
       }
 
       // Check for milestone discoveries using batch processing
